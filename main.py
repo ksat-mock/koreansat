@@ -4,25 +4,18 @@ from google.oauth2.service_account import Credentials
 
 # Google Sheets 연동 함수
 def connect_to_gsheet():
-    # JSON 키 파일 경로
-    SERVICE_ACCOUNT_FILE = 'deft-shade-447911-u8-190f204322b3.json'
+    creds_json = os.getenv("GSHEET_PRIVATE_KEY").replace("\\n", "\n")
+    creds_info = json.loads(creds_json)
 
     # 인증 범위
-    SCOPES = [
-        'https://www.googleapis.com/auth/spreadsheets',
-        'https://www.googleapis.com/auth/drive'
-    ]
-
-    # 인증 정보 불러오기
-    creds = Credentials.from_service_account_file(
-        SERVICE_ACCOUNT_FILE, scopes=SCOPES
-    )
-
-    # gspread를 통한 Google Sheets 연결
+      SCOPES = [
+          'https://www.googleapis.com/auth/spreadsheets',
+          'https://www.googleapis.com/auth/drive'
+      ]
+    
+    creds = Credentials.from_service_account_info(creds_info)
     client = gspread.authorize(creds)
-
     return client
-
 
 # Google Sheets에서 데이터 불러오기
 def load_tabs_data_from_gsheet():
