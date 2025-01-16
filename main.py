@@ -6,7 +6,7 @@ import json
 from streamlit_gsheets import GSheetsConnection
 
 # Create a connection object.
-conn = st.connection("gsheets", type=GSheetsConnection)
+conn = st.connection("gsheets", type=GSheetsConnection, spreadsheet = "https://docs.google.com/spreadsheets/u/3/d/1y_q2gDCyX4HhFKh2FUVowC5RH9kV3iTkYWErV-oSlIk/edit?gid=0#gid=0")
 
 df = conn.read()
 
