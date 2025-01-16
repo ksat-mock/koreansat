@@ -8,11 +8,11 @@ def connect_to_gsheet():
     creds_info = json.loads(creds_json)
 
     # 인증 범위
-      SCOPES = [
-          'https://www.googleapis.com/auth/spreadsheets',
-          'https://www.googleapis.com/auth/drive'
-      ]
-    
+    SCOPES = [
+        'https://www.googleapis.com/auth/spreadsheets',
+        'https://www.googleapis.com/auth/drive'
+    ]
+
     creds = Credentials.from_service_account_info(creds_info)
     client = gspread.authorize(creds)
     return client
