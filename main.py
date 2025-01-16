@@ -1,6 +1,8 @@
 import streamlit as st
 import gspread
 from google.oauth2.service_account import Credentials
+import os
+import json
 
 # Google Sheets 연동 함수
 def connect_to_gsheet():
