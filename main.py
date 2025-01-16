@@ -3,60 +3,93 @@ import gspread
 from google.oauth2.service_account import Credentials
 import os
 import json
+from streamlit_gsheets import GSheetsConnection
+
+# Create a connection object.
+conn = st.connection("gsheets", type=GSheetsConnection)
+
+df = conn.read()
+
+# Print results.
+for row in df.itertuples():
+    st.write(f"{row.name} has a :{row.pet}:")
+
+# 데이터 가공
+tabs_data = {}
+for row in df:
+    tab_name = row['탭']
+    if tab_name not in tabs_data:
+        tabs_data[tab_name] = {"passage": row['지문'], "questions": [], "correct_answers": []}
+
+    # 선지 리스트로 변환
+    choices = [row[f'선지{i}'] for i in range(1, 6)]
+
+    # 질문 추가
+    tabs_data[tab_name]["questions"].append({
+        "question": row['질문'],
+        "choices": choices
+    })
+
+    # 정답 추가 (정답이 문자열일 경우 정수로 변환)
+    tabs_data[tab_name]["correct_answers"].append(int(row['정답']))
+
+
+# tabs_data = load_tabs_data_from_gsheet()
+    
 
 # Google Sheets 연동 함수
-def connect_to_gsheet():
-    creds_json = os.getenv("GSHEET_PRIVATE_KEY").replace("\\n", "\n")
-    creds_info = json.loads(creds_json)
+# def connect_to_gsheet():
+#     creds_json = os.getenv("GSHEET_PRIVATE_KEY").replace("\\n", "\n")
+#     creds_info = json.loads(creds_json)
 
-    # 인증 범위
-    SCOPES = [
-        'https://www.googleapis.com/auth/spreadsheets',
-        'https://www.googleapis.com/auth/drive'
-    ]
+#     # 인증 범위
+#     SCOPES = [
+#         'https://www.googleapis.com/auth/spreadsheets',
+#         'https://www.googleapis.com/auth/drive'
+#     ]
 
-    creds = Credentials.from_service_account_info(creds_info)
-    client = gspread.authorize(creds)
-    return client
+#     creds = Credentials.from_service_account_info(creds_info)
+#     client = gspread.authorize(creds)
+#     return client
 
-# Google Sheets에서 데이터 불러오기
-def load_tabs_data_from_gsheet():
-    tabs_data = {}
+# # Google Sheets에서 데이터 불러오기
+# def load_tabs_data_from_gsheet():
+#     tabs_data = {}
 
-    # Google Sheets 연결
-    client = connect_to_gsheet()
+#     # Google Sheets 연결
+#     client = connect_to_gsheet()
 
-    # 시트 ID와 워크시트 이름을 입력해야 함
-    sheet_id = '1y_q2gDCyX4HhFKh2FUVowC5RH9kV3iTkYWErV-oSlIk'  # 여기에 시트 ID 입력
-    worksheet_name = 'koreansat_googlesheet'  # 워크시트 이름 (시트 하단 탭 이름)
+#     # 시트 ID와 워크시트 이름을 입력해야 함
+#     sheet_id = '1y_q2gDCyX4HhFKh2FUVowC5RH9kV3iTkYWErV-oSlIk'  # 여기에 시트 ID 입력
+#     worksheet_name = 'koreansat_googlesheet'  # 워크시트 이름 (시트 하단 탭 이름)
 
-    # 시트 열기
-    sheet = client.open_by_key(sheet_id).worksheet(worksheet_name)
+#     # 시트 열기
+#     sheet = client.open_by_key(sheet_id).worksheet(worksheet_name)
 
-    # 데이터 불러오기
-    data = sheet.get_all_records()
+#     # 데이터 불러오기
+#     data = sheet.get_all_records()
 
-    # 데이터 가공
-    for row in data:
-        tab_name = row['탭']
-        if tab_name not in tabs_data:
-            tabs_data[tab_name] = {"passage": row['지문'], "questions": [], "correct_answers": []}
+#     # 데이터 가공
+#     for row in data:
+#         tab_name = row['탭']
+#         if tab_name not in tabs_data:
+#             tabs_data[tab_name] = {"passage": row['지문'], "questions": [], "correct_answers": []}
 
-        # 선지 리스트로 변환
-        choices = [row[f'선지{i}'] for i in range(1, 6)]
+#         # 선지 리스트로 변환
+#         choices = [row[f'선지{i}'] for i in range(1, 6)]
 
-        # 질문 추가
-        tabs_data[tab_name]["questions"].append({
-            "question": row['질문'],
-            "choices": choices
-        })
+#         # 질문 추가
+#         tabs_data[tab_name]["questions"].append({
+#             "question": row['질문'],
+#             "choices": choices
+#         })
 
-        # 정답 추가 (정답이 문자열일 경우 정수로 변환)
-        tabs_data[tab_name]["correct_answers"].append(int(row['정답']))
+#         # 정답 추가 (정답이 문자열일 경우 정수로 변환)
+#         tabs_data[tab_name]["correct_answers"].append(int(row['정답']))
 
-    return tabs_data
+#     return tabs_data
 
-tabs_data = load_tabs_data_from_gsheet()
+# tabs_data = load_tabs_data_from_gsheet()
 
 
 ##########################################################
