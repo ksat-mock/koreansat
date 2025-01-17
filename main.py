@@ -38,6 +38,7 @@ def get_data():
     # st.write(tabs_data)
     return tabs_data
 
+tabs_data = {}
 tabs_data = get_data()
 
 ##########################################################
