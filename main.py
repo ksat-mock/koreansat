@@ -16,7 +16,7 @@ for row in df.itertuples():
 
 # 데이터 가공
 tabs_data = {}
-for row in df:
+for row in df.itertuples():
     tab_name = row.탭
     if tab_name not in tabs_data:
         tabs_data[tab_name] = {"passage": row.지문, "questions": [], "correct_answers": []}
