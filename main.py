@@ -61,8 +61,7 @@ def first_page():
 def second_page():
     st.set_page_config(layout="wide")
 
-    tabs_data = {}
-    tabs_data = get_data()
+    tabs_data = tabs_data = get_data()
     st.write("null")
 
     # 탭 세션 관리
