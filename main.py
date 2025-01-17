@@ -22,7 +22,7 @@ for row in df.itertuples():
         tabs_data[tab_name] = {"passage": row.지문, "questions": [], "correct_answers": []}
 
     # 선지 리스트로 변환
-    choices = [row[f'선지{i}'] for i in range(1, 6)]
+    choices = [row.f'선지{i}' for i in range(1, 6)]
 
     # 질문 추가
     tabs_data[tab_name]["questions"].append({
