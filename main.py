@@ -35,7 +35,6 @@ def get_data():
         # 정답 추가 (정답이 문자열일 경우 정수로 변환)
         tabs_data[tab_name]["correct_answers"].append(int(row.정답))
     
-    # st.write(tabs_data)
     return tabs_data
     
 
@@ -64,6 +63,7 @@ def second_page():
 
     tabs_data = {}
     tabs_data = get_data()
+    st.write("null")
 
     # 탭 세션 관리
     tabs = list(tabs_data.keys())
