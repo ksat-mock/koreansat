@@ -12,8 +12,8 @@ def get_data():
     df = conn.read()
     
     # Print results.
-    for row in df.itertuples():
-        st.write(f"{row.탭} has a :{row.지문}:")
+    # for row in df.itertuples():
+    #     st.write(f"{row.탭} has a :{row.지문}:")
     
     # 데이터 가공
     tabs_data = {}
