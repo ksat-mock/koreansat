@@ -37,9 +37,7 @@ def get_data():
     
     # st.write(tabs_data)
     return tabs_data
-
-tabs_data = {}
-tabs_data = get_data()
+    
 
 ##########################################################
 ##########################################################
@@ -50,8 +48,6 @@ def first_page():
     st.title("전화번호 뒷자리 입력")
 
     phone_number = st.text_input("전화번호 뒷자리 4자리를 입력하세요:", max_chars=4)
-
-    print(get_data())
 
     if st.button("다음"):
         if phone_number and phone_number.isdigit() and len(str(phone_number)) == 4:
@@ -65,6 +61,9 @@ def first_page():
 # 두 번째 페이지: 문제 풀이 페이지
 def second_page():
     st.set_page_config(layout="wide")
+
+    tabs_data = {}
+    tabs_data = get_data()
 
     # 탭 세션 관리
     tabs = list(tabs_data.keys())
