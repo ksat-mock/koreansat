@@ -34,7 +34,7 @@ for row in df.itertuples():
     # 정답 추가 (정답이 문자열일 경우 정수로 변환)
     tabs_data[tab_name]["correct_answers"].append(int(row.정답))
 
-    st.write(tabs_data)
+st.write(tabs_data)
 
 
 # tabs_data = load_tabs_data_from_gsheet()
