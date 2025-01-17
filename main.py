@@ -17,21 +17,21 @@ for row in df.itertuples():
 # 데이터 가공
 tabs_data = {}
 for row in df:
-    tab_name = row['탭']
+    tab_name = row.탭
     if tab_name not in tabs_data:
-        tabs_data[tab_name] = {"passage": row['지문'], "questions": [], "correct_answers": []}
+        tabs_data[tab_name] = {"passage": row.지문, "questions": [], "correct_answers": []}
 
     # 선지 리스트로 변환
     choices = [row[f'선지{i}'] for i in range(1, 6)]
 
     # 질문 추가
     tabs_data[tab_name]["questions"].append({
-        "question": row['질문'],
+        "question": row.질문,
         "choices": choices
     })
 
     # 정답 추가 (정답이 문자열일 경우 정수로 변환)
-    tabs_data[tab_name]["correct_answers"].append(int(row['정답']))
+    tabs_data[tab_name]["correct_answers"].append(int(row.정답))
 
 
 # tabs_data = load_tabs_data_from_gsheet()
