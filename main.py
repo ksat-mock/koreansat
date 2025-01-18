@@ -189,8 +189,8 @@ def second_page():
         tab_key = f"answers_tab{st.session_state.current_tab}"
     
         # 딕셔너리로 초기화
-        if tab_key not in st.session_state:
-            st.session_state[tab_key] = {}
+        # if tab_key not in st.session_state:
+        #     st.session_state[tab_key] = {}
     
         for idx, q in enumerate(questions):
             with cols[1]:
@@ -207,7 +207,7 @@ def second_page():
                 )
     
                 # 답안 저장
-                st.session_state[tab_key][f"{idx}"] = (
+                st.session_state[tab_key][idx] = (
                     q["choices"].index(selected_main) if selected_main else None
                 )
     
