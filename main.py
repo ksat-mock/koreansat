@@ -59,7 +59,7 @@ def first_page():
 
 # 두 번째 페이지: 문제 풀이 페이지
 def second_page():
-    # st.set_page_config(layout="wide")
+    st.set_page_config(layout="wide")
     st.markdown(
         """
         <style>
