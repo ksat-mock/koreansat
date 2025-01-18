@@ -56,7 +56,8 @@ def get_data():
     # Create a connection object.
     conn = st.connection("gsheets", type=GSheetsConnection)
     
-    df = conn.read()
+    # 매번 최신 데이터를 읽어오도록 설정
+    df = conn.read(clear_cache=True)  # 캐시 비우고 새로 읽어오기
     
     # Print results.
     # for row in df.itertuples():
