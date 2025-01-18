@@ -35,10 +35,10 @@ def get_data():
             sub_question_text = getattr(row, sub_question_col)
 
             # 하위 질문 선지 처리
-                sub_choices = []
-                for i in range(1, 6):
-                    choice_col = f"하위 질문{sub_idx} 선지{i}"
-                    sub_choices.append(getattr(row, choice_col))
+            sub_choices = []
+            for i in range(1, 6):
+                choice_col = f"하위 질문{sub_idx} 선지{i}"
+                sub_choices.append(getattr(row, choice_col))
         
                         
             # 하위 질문이 있는지 확인
