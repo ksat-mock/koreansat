@@ -31,16 +31,16 @@ from streamlit_gsheets import GSheetsConnection
 def sub_questions(row):
     # row는 df의 각 행을 나타냅니다.
     sub_questions_passage = [
-        row['지문 평가1'],
-        row['지문 평가2'],
-        row['지문 평가3'],
-        row['지문 평가4']
+        row['지문평가1'],
+        row['지문평가2'],
+        row['지문평가3'],
+        row['지문평가4']
     ]
     
     sub_questions_problems = [
-        row['문제 평가1'],
-        row['문제 평가2'],
-        row['문제 평가3']
+        row['문제평가1'],
+        row['문제평가2'],
+        row['문제평가3']
     ]
     
     # None 값 제거
