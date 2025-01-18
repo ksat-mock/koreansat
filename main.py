@@ -103,6 +103,7 @@ def second_page():
     )
 
     tabs_data = tabs_data = get_data()
+    st.caption(tabs_data)
 
     # 탭 세션 관리
     tabs = list(tabs_data.keys())
