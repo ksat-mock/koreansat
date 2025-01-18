@@ -392,18 +392,18 @@ def second_page():
                                 )
 
                         
-                        # 문제 평가 답안 저장
-                        for problems_q_key, sub_answers in st.session_state[problems_key].items():
-                            for sub_idx, _ in enumerate(sub_answers):
-                                sub_answer_key = f"{problems_q_key}_sub{sub_idx+1}"
-                                st.session_state[problems_key][problems_q_key][sub_idx] = st.slider(
-                                    f"문제 평가 {problems_q_key} - {sub_idx+1}",
-                                    min_value=1,
-                                    max_value=5,
-                                    value=3,
-                                    step=1,
-                                    key=sub_answer_key
-                                )
+                        # # 문제 평가 답안 저장
+                        # for problems_q_key, sub_answers in st.session_state[problems_key].items():
+                        #     for sub_idx, _ in enumerate(sub_answers):
+                        #         sub_answer_key = f"{problems_q_key}_sub{sub_idx+1}"
+                        #         st.session_state[problems_key][problems_q_key][sub_idx] = st.slider(
+                        #             f"문제 평가 {problems_q_key} - {sub_idx+1}",
+                        #             min_value=1,
+                        #             max_value=5,
+                        #             value=3,
+                        #             step=1,
+                        #             key=sub_answer_key
+                        #         )
 
 
     
