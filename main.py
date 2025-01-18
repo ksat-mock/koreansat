@@ -5,6 +5,32 @@ import os
 import json
 from streamlit_gsheets import GSheetsConnection
 
+def sub_questions(row):
+    # '지문 평가1', '지문 평가2', '지문 평가3', '지문 평가4' 값을 sub_questions_passage 리스트에 저장
+    sub_questions_passage = [
+        getattr(row, '지문 평가1', None),
+        getattr(row, '지문 평가2', None),
+        getattr(row, '지문 평가3', None),
+        getattr(row, '지문 평가4', None)
+    ]
+    
+    # '문제 평가1', '문제 평가2', '문제 평가3' 값을 sub_questions_problems 리스트에 저장
+    sub_questions_problems = [
+        getattr(row, '문제 평가1', None),
+        getattr(row, '문제 평가2', None),
+        getattr(row, '문제 평가3', None),
+        getattr(row, '문제 평가4', None)
+    ]
+    
+    # None 값이 있는 경우 필터링
+    sub_questions_passage = [item for item in sub_questions_passage if item is not None]
+    sub_questions_problems = [item for item in sub_questions_problems if item is not None]
+    
+    return sub_questions_passage, sub_questions_problems
+
+sub_questions_TF = True
+
+
 def get_data():
     # Create a connection object.
     conn = st.connection("gsheets", type=GSheetsConnection)
@@ -14,7 +40,9 @@ def get_data():
     # Print results.
     # for row in df.itertuples():
     #     st.write(f"{row.탭} has a :{row.지문}:")
-    
+
+
+
     # 데이터 가공
     tabs_data = {}
     for row in df.itertuples():
@@ -26,31 +54,33 @@ def get_data():
         # choices = [row.f'선지{i}' for i in range(1, 6)]
         choices = [getattr(row, f'선지{i}') for i in range(1, 6)]
 
+
+        # 하위 문제 (지문 평가, 문제 평가) 받아오기
+        if sub_questions_TF:
+            sub_questions_passage, sub_questions_problems = sub_questions(row)
+            sub_questions_TF = False
+
+        st.write(sub_questions_passage, sub_questions_problems)
+
+
+        
+
         sub_questions = []
         sub_idx = 1
         while True:
             # 하위 질문 컬럼명 생성
-            sub_question_col = f"하위 질문{sub_idx}"
-
-            sub_question_text = getattr(row, sub_question_col)
-
-            # 하위 질문 선지 처리
-            sub_choices = []
-            for i in range(1, 6):
-                choice_col = f"하위 질문{sub_idx} 선지{i}"
-                sub_choices.append(getattr(row, choice_col))
-        
+            sub_question_col = f"하위 질문{sub_idx}"        
                         
-            # 하위 질문이 있는지 확인
-            # if hasattr(row, sub_question_col) and getattr(row, sub_question_col):
-            #     sub_question_text = getattr(row, sub_question_col)
+            하위 질문이 있는지 확인
+            if hasattr(row, sub_question_col) and getattr(row, sub_question_col):
+                sub_question_text = getattr(row, sub_question_col)
                 
-            #     # 하위 질문 선지 처리
-            #     sub_choices = []
-            #     for i in range(1, 6):
-            #         choice_col = f"하위 질문{sub_idx} 선지{i}"
-            #         if hasattr(row, choice_col) and getattr(row, choice_col):  # 선지가 존재할 때만 추가
-            #             sub_choices.append(getattr(row, choice_col))
+                # 하위 질문 선지 처리
+                sub_choices = []
+                for i in range(1, 6):
+                    choice_col = f"하위 질문{sub_idx} 선지{i}"
+                    if hasattr(row, choice_col) and getattr(row, choice_col):  # 선지가 존재할 때만 추가
+                        sub_choices.append(getattr(row, choice_col))
                 
                 # 하위 질문 정답 처리
                 answer_col = f"하위 질문{sub_idx} 정답"
