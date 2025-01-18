@@ -71,7 +71,7 @@ def get_data():
             # 하위 질문 컬럼명 생성
             sub_question_col = f"하위 질문{sub_idx}"        
                         
-            하위 질문이 있는지 확인
+            #하위 질문이 있는지 확인
             if hasattr(row, sub_question_col) and getattr(row, sub_question_col):
                 sub_question_text = getattr(row, sub_question_col)
                 
