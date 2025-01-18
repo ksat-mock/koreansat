@@ -97,7 +97,7 @@ def get_data():
 
 
         
-
+        """
         sub_questions = []
         sub_idx = 1
         while True:
@@ -132,6 +132,8 @@ def get_data():
                 sub_idx += 1
             else:
                 break  # 더 이상 하위 질문이 없으면 반복 종료
+
+        """
     
         # 질문 추가
         tabs_data[tab_name]["questions"].append({
