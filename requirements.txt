@@ -1,6 +1,5 @@
 streamlit
 gspread
 google-auth
-math
 st-gsheets-connection
 git+https://github.com/streamlit/gsheets-connection
