@@ -81,7 +81,7 @@ def get_data():
         # if sub_questions_TF:
         #     sub_questions_passage, sub_questions_problems = sub_questions(row)
         #     sub_questions_TF = False
-        sub_questions_passage, sub_questions_problems = sub_questions(row)
+        sub_questions_passage, sub_questions_problems = sub_questions(df)
         st.write(sub_questions_passage, sub_questions_problems)
 
 
