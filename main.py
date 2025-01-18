@@ -91,7 +91,7 @@ def get_data():
         # 하위 문제 (지문 평가, 문제 평가) 받아오기
         if row.지문평가1:
             sub_questions_passage = [row.지문평가1, row.지문평가2, row.지문평가3, row.지문평가4]
-            sub_questions_problems = [row.문제평가1, row.문제평가2, row.문제평가3, row.문제평가4]
+            sub_questions_problems = [row.문제평가1, row.문제평가2, row.문제평가3]
         
         # sub_questions_passage, sub_questions_problems = sub_questions(row)
         st.write(sub_questions_passage, sub_questions_problems)
