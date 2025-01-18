@@ -378,19 +378,6 @@ def second_page():
                         #     sub_q["choices"].index(selected_sub) if selected_sub else None
                         # )
 
-
-                        # 지문 평가 답안 저장
-                        for passage_q_key, sub_answers in st.session_state[passage_key].items():
-                            for sub_idx, _ in enumerate(sub_answers):
-                                sub_answer_key = f"{passage_q_key}_sub{sub_idx+1}"
-                                st.session_state[passage_key][passage_q_key][sub_idx] = st.slider(
-                                    f"지문 평가 {passage_q_key} - {sub_idx+1}",
-                                    min_value=1,
-                                    max_value=5,
-                                    value=3,
-                                    step=1,
-                                    key=sub_answer_key
-                                )
                         
                         # 문제 평가 답안 저장
                         for problems_q_key, sub_answers in st.session_state[problems_key].items():
