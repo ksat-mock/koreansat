@@ -70,6 +70,7 @@ def get_data():
     tabs_data = {}
     for row in df.itertuples():
         tab_name = row.탭
+        st.write(row.지문평가1)
         if tab_name not in tabs_data:
             tabs_data[tab_name] = {"passage": row.지문, "questions": [], "correct_answers": []}
     
