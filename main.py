@@ -169,38 +169,39 @@ def second_page():
             st.header("지문")
             st.write(passage)
     
-        with cols[1]:
-            # 현재 탭에 해당하는 문제 리스트와 답안 리스트를 가져오기
-            for idx, q in enumerate(tabs_data[st.session_state.current_tab]["questions"]):
+        # 문제 리스트 가져오기
+    questions = tabs_data[st.session_state.current_tab]["questions"]
+    num_questions = len(questions)
+    num_cols = 5  # 지문을 제외한 문제 컬럼 수 (2~6번 컬럼)
+
+    # 문제를 각 컬럼에 나눠 배치
+    for col_idx in range(1, 6):  # cols[1]~cols[5]
+        with cols[col_idx]:
+            for idx in range(col_idx - 1, num_questions, num_cols):
+                q = questions[idx]
                 st.subheader(q["question"])
-                selected = st.radio(f"문제 {idx + 1}의 답을 선택하세요:", q["choices"], index=None, key=f"question_{idx}")
-    
-                # 현재 탭에 해당하는 키에 답안을 저장
+
+                # 고유한 key 생성 (컬럼 번호 + 문제 번호)
+                unique_key = f"question_{st.session_state.current_tab}_{col_idx}_{idx}"
+
+                # 라디오 버튼 생성
+                selected = st.radio(
+                    f"문제 {idx + 1}의 답을 선택하세요:",
+                    q["choices"],
+                    index=None,
+                    key=unique_key
+                )
+
+                # 답안 저장
                 tab_key = f"answers_tab{st.session_state.current_tab}"
-                st.session_state[tab_key][idx] = q["choices"].index(selected) if selected else None
-    
-                st.markdown("  ")
-    
-        with cols[2]:
-            # 현재 탭에 해당하는 문제 리스트와 답안 리스트를 가져오기
-            for idx, q in enumerate(tabs_data[st.session_state.current_tab]["questions"]):
-                st.subheader(q["question"])
-                selected = st.radio(f"문제 {idx + 1}의 답을 선택하세요:", q["choices"], index=None, key=f"question_{idx}")
-    
-                # 현재 탭에 해당하는 키에 답안을 저장
-                tab_key = f"answers_tab{st.session_state.current_tab}"
-                st.session_state[tab_key][idx] = q["choices"].index(selected) if selected else None
-    
-                st.markdown("  ")
-    
-        with cols[3]:
-            st.write("컬럼 4 (비율 1)")
-    
-        with cols[4]:
-            st.write("컬럼 5 (비율 1)")
-    
-        with cols[5]:
-            st.write("컬럼 6 (비율 1)")
+                if tab_key not in st.session_state:
+                    st.session_state[tab_key] = [None] * num_questions
+
+                st.session_state[tab_key][idx] = (
+                    q["choices"].index(selected) if selected else None
+                )
+
+                st.markdown(" ")
 
 
 
