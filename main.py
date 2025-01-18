@@ -6,49 +6,27 @@ import json
 from streamlit_gsheets import GSheetsConnection
 import math
 
+
 # def sub_questions(row):
-#     # '지문 평가1', '지문 평가2', '지문 평가3', '지문 평가4' 값을 sub_questions_passage 리스트에 저장
+#     # row는 df의 각 행을 나타냅니다.
 #     sub_questions_passage = [
-#         getattr(row, '지문 평가1', None),
-#         getattr(row, '지문 평가2', None),
-#         getattr(row, '지문 평가3', None),
-#         getattr(row, '지문 평가4', None)
+#         row['지문평가1'],
+#         row['지문평가2'],
+#         row['지문평가3'],
+#         row['지문평가4']
 #     ]
     
-#     # '문제 평가1', '문제 평가2', '문제 평가3' 값을 sub_questions_problems 리스트에 저장
 #     sub_questions_problems = [
-#         getattr(row, '문제 평가1', None),
-#         getattr(row, '문제 평가2', None),
-#         getattr(row, '문제 평가3', None),
-#         getattr(row, '문제 평가4', None)
+#         row['문제평가1'],
+#         row['문제평가2'],
+#         row['문제평가3']
 #     ]
     
-#     # None 값이 있는 경우 필터링
+#     # None 값 제거
 #     sub_questions_passage = [item for item in sub_questions_passage if item is not None]
 #     sub_questions_problems = [item for item in sub_questions_problems if item is not None]
     
 #     return sub_questions_passage, sub_questions_problems
-
-def sub_questions(row):
-    # row는 df의 각 행을 나타냅니다.
-    sub_questions_passage = [
-        row['지문평가1'],
-        row['지문평가2'],
-        row['지문평가3'],
-        row['지문평가4']
-    ]
-    
-    sub_questions_problems = [
-        row['문제평가1'],
-        row['문제평가2'],
-        row['문제평가3']
-    ]
-    
-    # None 값 제거
-    sub_questions_passage = [item for item in sub_questions_passage if item is not None]
-    sub_questions_problems = [item for item in sub_questions_problems if item is not None]
-    
-    return sub_questions_passage, sub_questions_problems
 
 
 
