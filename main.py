@@ -141,7 +141,7 @@ def get_data():
         tabs_data[tab_name]["questions"].append({
             "question": row.질문,
             "choices": choices,
-            "sub_questions": sub_questions  # 하위 질문 추가
+            "sub_questions": sub_questions_passage + sub_questions_problems  # 하위 질문 추가
         })
     
         # 정답 추가 (정답이 문자열일 경우 정수로 변환)
