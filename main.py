@@ -4,6 +4,7 @@ from google.oauth2.service_account import Credentials
 import os
 import json
 from streamlit_gsheets import GSheetsConnection
+import math
 
 # def sub_questions(row):
 #     # '지문 평가1', '지문 평가2', '지문 평가3', '지문 평가4' 값을 sub_questions_passage 리스트에 저장
