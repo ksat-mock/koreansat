@@ -113,7 +113,18 @@ def second_page():
         if correct_status_key not in st.session_state:
             st.session_state[correct_status_key] = [None] * len(tabs_data[tab_idx]["questions"])  # 각 문제별 정답 여부 초기화
 
+        # 하위 문제 답안 세션 초기화
+        subquestions_key = f"subquestions_tab{tab_idx}"
+        if subquestions_key not in st.session_state:
+            # 하위 문제를 딕셔너리로 정의하여 초기화
+            st.session_state[subquestions_key] = {
+                f"subq_{q_idx+1}": [None] * len(question["subquestions"])
+                for q_idx, question in enumerate(tabs_data[tab_idx]["questions"])
+                if "subquestions" in question  # 하위 문제가 있는 경우만 처리
+            }
 
+
+    
     # 평가 기준 설명
     st.markdown("##### 다음 평가 기준에 따라 4개의 수능 국어 지문/문제를 평가해주세요")
     # st.subheader("아래 4개의 수능 국어 문제를 풀고, 다음 평가 기준에 따라 평가해주세요")
