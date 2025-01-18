@@ -163,8 +163,8 @@ def second_page():
 
     
     with st.container():
-    # 컬럼 비율: 문제(1.5) + 하위 문제들(1씩)
-    cols = st.columns([1.5, 1, 1, 1, 1, 1])
+        # 컬럼 비율: 문제(1.5) + 하위 문제들(1씩)
+        cols = st.columns([1.5, 1, 1, 1, 1, 1])
 
         with cols[0]:
             st.header("지문")
