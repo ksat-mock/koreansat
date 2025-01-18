@@ -26,29 +26,40 @@ def get_data():
         # choices = [row.f'선지{i}' for i in range(1, 6)]
         choices = [getattr(row, f'선지{i}') for i in range(1, 6)]
 
-        # 하위 질문 처리
         sub_questions = []
         sub_idx = 1
         while True:
+            # 하위 질문 컬럼명 생성
             sub_question_col = f"하위 질문{sub_idx}"
+            
+            # 하위 질문이 있는지 확인
             if hasattr(row, sub_question_col) and getattr(row, sub_question_col):
-                # 하위 질문 및 선지 처리
                 sub_question_text = getattr(row, sub_question_col)
-                sub_choices = [
-                    getattr(row, f"하위 질문{sub_idx} 선지{i}") 
-                    for i in range(1, 6)
-                    if hasattr(row, f"하위 질문{sub_idx} 선지{i}") and getattr(row, f"하위 질문{sub_idx} 선지{i}")
-                ]
-                sub_answer = getattr(row, f"하위 질문{sub_idx} 정답")
                 
+                # 하위 질문 선지 처리
+                sub_choices = []
+                for i in range(1, 6):
+                    choice_col = f"하위 질문{sub_idx} 선지{i}"
+                    if hasattr(row, choice_col) and getattr(row, choice_col):  # 선지가 존재할 때만 추가
+                        sub_choices.append(getattr(row, choice_col))
+                
+                # 하위 질문 정답 처리
+                answer_col = f"하위 질문{sub_idx} 정답"
+                sub_answer = None
+                if hasattr(row, answer_col) and getattr(row, answer_col):  # 정답이 존재할 때만 처리
+                    sub_answer = int(getattr(row, answer_col))
+                
+                # 하위 질문 추가
                 sub_questions.append({
                     "question": sub_question_text,
                     "choices": sub_choices,
-                    "answer": int(sub_answer) if sub_answer else None
+                    "answer": sub_answer
                 })
+                
+                # 다음 하위 질문으로
                 sub_idx += 1
             else:
-                break  # 더 이상 하위 질문이 없으면 중단
+                break  # 더 이상 하위 질문이 없으면 반복 종료
     
         # 질문 추가
         tabs_data[tab_name]["questions"].append({
