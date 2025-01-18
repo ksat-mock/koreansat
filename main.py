@@ -28,8 +28,6 @@ def sub_questions(row):
     
     return sub_questions_passage, sub_questions_problems
 
-sub_questions_TF = True
-
 
 def get_data():
     # Create a connection object.
@@ -43,6 +41,8 @@ def get_data():
 
 
 
+    sub_questions_TF = True
+    
     # 데이터 가공
     tabs_data = {}
     for row in df.itertuples():
