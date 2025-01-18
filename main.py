@@ -25,11 +25,36 @@ def get_data():
         # 선지 리스트로 변환
         # choices = [row.f'선지{i}' for i in range(1, 6)]
         choices = [getattr(row, f'선지{i}') for i in range(1, 6)]
+
+        # 하위 질문 처리
+        sub_questions = []
+        sub_idx = 1
+        while True:
+            sub_question_col = f"하위 질문{sub_idx}"
+            if hasattr(row, sub_question_col) and getattr(row, sub_question_col):
+                # 하위 질문 및 선지 처리
+                sub_question_text = getattr(row, sub_question_col)
+                sub_choices = [
+                    getattr(row, f"하위 질문{sub_idx} 선지{i}") 
+                    for i in range(1, 6)
+                    if hasattr(row, f"하위 질문{sub_idx} 선지{i}") and getattr(row, f"하위 질문{sub_idx} 선지{i}")
+                ]
+                sub_answer = getattr(row, f"하위 질문{sub_idx} 정답")
+                
+                sub_questions.append({
+                    "question": sub_question_text,
+                    "choices": sub_choices,
+                    "answer": int(sub_answer) if sub_answer else None
+                })
+                sub_idx += 1
+            else:
+                break  # 더 이상 하위 질문이 없으면 중단
     
         # 질문 추가
         tabs_data[tab_name]["questions"].append({
             "question": row.질문,
-            "choices": choices
+            "choices": choices,
+            "sub_questions": sub_questions  # 하위 질문 추가
         })
     
         # 정답 추가 (정답이 문자열일 경우 정수로 변환)
