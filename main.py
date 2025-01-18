@@ -163,49 +163,63 @@ def second_page():
 
     
     with st.container():
-        # 컬럼 비율: 문제(1.5) + 하위 문제들(1씩)
+        # 컬럼 비율: 지문(1.5) + 문제(1) + 하위 문제들(1씩)
         cols = st.columns([1.5, 1, 1, 1, 1, 1])
-
+    
+        # 1️⃣ 지문 (첫 번째 컬럼)
         with cols[0]:
             st.header("지문")
             st.write(passage)
     
-        # 문제 리스트 가져오기
+        # 2️⃣ 문제 (두 번째 컬럼)
         questions = tabs_data[st.session_state.current_tab]["questions"]
-    
         for idx, q in enumerate(questions):
-            # 문제 본문 표시 (왼쪽 컬럼)
-            with cols[0]:
+            with cols[1]:
                 st.subheader(f"문제 {idx + 1}")
                 st.write(q["question"])
     
-            # 하위 문제들을 오른쪽 컬럼에 배치
-            sub_questions = q.get("sub_questions", [])  # 하위 문제가 있을 경우
+                # 문제 답변 선택
+                main_key = f"main_question_{st.session_state.current_tab}_{idx}"
+                selected_main = st.radio(
+                    f"문제 {idx + 1}의 답을 선택하세요:",
+                    q["choices"],
+                    index=None,
+                    key=main_key
+                )
+    
+                # 답안 저장
+                tab_key = f"answers_tab{st.session_state.current_tab}"
+                if tab_key not in st.session_state:
+                    st.session_state[tab_key] = {}
+    
+                st.session_state[tab_key][f"{idx}"] = (
+                    q["choices"].index(selected_main) if selected_main else None
+                )
+    
+            # 3️⃣ 하위 문제들 (세 번째 컬럼부터 오른쪽에 배치)
+            sub_questions = q.get("sub_questions", [])
             for sub_idx, sub_q in enumerate(sub_questions):
-                if sub_idx + 1 < len(cols):  # 컬럼 범위를 초과하지 않도록
-                    with cols[sub_idx + 1]:
+                col_position = sub_idx + 2  # 세 번째 컬럼부터 배치
+    
+                if col_position < len(cols):  # 컬럼 범위를 초과하지 않도록
+                    with cols[col_position]:
                         st.subheader(f"{idx + 1}-{sub_idx + 1}")
                         st.write(sub_q["question"])
     
                         # 고유한 key 생성
-                        unique_key = f"question_{st.session_state.current_tab}_{idx}_{sub_idx}"
-    
-                        # 라디오 버튼 생성
-                        selected = st.radio(
+                        sub_key = f"sub_question_{st.session_state.current_tab}_{idx}_{sub_idx}"
+                        selected_sub = st.radio(
                             f"{idx + 1}-{sub_idx + 1}의 답을 선택하세요:",
                             sub_q["choices"],
                             index=None,
-                            key=unique_key
+                            key=sub_key
                         )
     
-                        # 답안 저장
-                        tab_key = f"answers_tab{st.session_state.current_tab}"
-                        if tab_key not in st.session_state:
-                            st.session_state[tab_key] = {}
-    
+                        # 하위 문제 답안 저장
                         st.session_state[tab_key][f"{idx}-{sub_idx}"] = (
-                            sub_q["choices"].index(selected) if selected else None
+                            sub_q["choices"].index(selected_sub) if selected_sub else None
                         )
+
 
 
 
