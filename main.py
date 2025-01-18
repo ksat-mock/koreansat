@@ -163,44 +163,44 @@ def second_page():
 
     
     with st.container():
-    cols = st.columns([1.5, 1, 1, 1, 1, 1])
-
-    with cols[0]:
-        st.header("지문")
-        st.write(passage)
-
-    with cols[1]:
-        # 현재 탭에 해당하는 문제 리스트와 답안 리스트를 가져오기
-        for idx, q in enumerate(tabs_data[st.session_state.current_tab]["questions"]):
-            st.subheader(q["question"])
-            selected = st.radio(f"문제 {idx + 1}의 답을 선택하세요:", q["choices"], index=None, key=f"question_{idx}")
-
-            # 현재 탭에 해당하는 키에 답안을 저장
-            tab_key = f"answers_tab{st.session_state.current_tab}"
-            st.session_state[tab_key][idx] = q["choices"].index(selected) if selected else None
-
-            st.markdown("  ")
-
-    with cols[2]:
-        # 현재 탭에 해당하는 문제 리스트와 답안 리스트를 가져오기
-        for idx, q in enumerate(tabs_data[st.session_state.current_tab]["questions"]):
-            st.subheader(q["question"])
-            selected = st.radio(f"문제 {idx + 1}의 답을 선택하세요:", q["choices"], index=None, key=f"question_{idx}")
-
-            # 현재 탭에 해당하는 키에 답안을 저장
-            tab_key = f"answers_tab{st.session_state.current_tab}"
-            st.session_state[tab_key][idx] = q["choices"].index(selected) if selected else None
-
-            st.markdown("  ")
-
-    with cols[3]:
-        st.write("컬럼 4 (비율 1)")
-
-    with cols[4]:
-        st.write("컬럼 5 (비율 1)")
-
-    with cols[5]:
-        st.write("컬럼 6 (비율 1)")
+        cols = st.columns([1.5, 1, 1, 1, 1, 1])
+    
+        with cols[0]:
+            st.header("지문")
+            st.write(passage)
+    
+        with cols[1]:
+            # 현재 탭에 해당하는 문제 리스트와 답안 리스트를 가져오기
+            for idx, q in enumerate(tabs_data[st.session_state.current_tab]["questions"]):
+                st.subheader(q["question"])
+                selected = st.radio(f"문제 {idx + 1}의 답을 선택하세요:", q["choices"], index=None, key=f"question_{idx}")
+    
+                # 현재 탭에 해당하는 키에 답안을 저장
+                tab_key = f"answers_tab{st.session_state.current_tab}"
+                st.session_state[tab_key][idx] = q["choices"].index(selected) if selected else None
+    
+                st.markdown("  ")
+    
+        with cols[2]:
+            # 현재 탭에 해당하는 문제 리스트와 답안 리스트를 가져오기
+            for idx, q in enumerate(tabs_data[st.session_state.current_tab]["questions"]):
+                st.subheader(q["question"])
+                selected = st.radio(f"문제 {idx + 1}의 답을 선택하세요:", q["choices"], index=None, key=f"question_{idx}")
+    
+                # 현재 탭에 해당하는 키에 답안을 저장
+                tab_key = f"answers_tab{st.session_state.current_tab}"
+                st.session_state[tab_key][idx] = q["choices"].index(selected) if selected else None
+    
+                st.markdown("  ")
+    
+        with cols[3]:
+            st.write("컬럼 4 (비율 1)")
+    
+        with cols[4]:
+            st.write("컬럼 5 (비율 1)")
+    
+        with cols[5]:
+            st.write("컬럼 6 (비율 1)")
 
 
 
