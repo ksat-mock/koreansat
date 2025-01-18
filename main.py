@@ -62,6 +62,7 @@ def get_data():
     # for row in df.itertuples():
     #     st.write(f"{row.탭} has a :{row.지문}:")
 
+    st.write(df)
 
 
     # sub_questions_TF = True
