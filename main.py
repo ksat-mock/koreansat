@@ -184,6 +184,14 @@ def second_page():
     
         # 2️⃣ 문제 (두 번째 컬럼)
         questions = tabs_data[st.session_state.current_tab]["questions"]
+    
+        # 답안 세션 키 생성
+        tab_key = f"answers_tab{st.session_state.current_tab}"
+    
+        # 딕셔너리로 초기화
+        if tab_key not in st.session_state:
+            st.session_state[tab_key] = {}
+    
         for idx, q in enumerate(questions):
             with cols[1]:
                 st.subheader(f"문제 {idx + 1}")
@@ -199,10 +207,6 @@ def second_page():
                 )
     
                 # 답안 저장
-                tab_key = f"answers_tab{st.session_state.current_tab}"
-                if tab_key not in st.session_state:
-                    st.session_state[tab_key] = {}
-    
                 st.session_state[tab_key][f"{idx}"] = (
                     q["choices"].index(selected_main) if selected_main else None
                 )
@@ -227,7 +231,9 @@ def second_page():
                         )
     
                         # 하위 문제 답안 저장
-                        st.session_state[tab_key][f"{idx}-{sub_idx}"] = (
+                        if f"{idx}-sub" not in st.session_state[tab_key]:
+                            st.session_state[tab_key][f"{idx}-sub"] = {}
+                        st.session_state[tab_key][f"{idx}-sub"][f"{sub_idx}"] = (
                             sub_q["choices"].index(selected_sub) if selected_sub else None
                         )
 
