@@ -28,19 +28,19 @@ from streamlit_gsheets import GSheetsConnection
     
 #     return sub_questions_passage, sub_questions_problems
 
-def sub_questions(df):
-    # 첫 번째 줄에서 데이터를 가져오기
+def sub_questions(row):
+    # row는 df의 각 행을 나타냅니다.
     sub_questions_passage = [
-        df.iloc[0]['지문 평가1'],
-        df.iloc[0]['지문 평가2'],
-        df.iloc[0]['지문 평가3'],
-        df.iloc[0]['지문 평가4']
+        row['지문 평가1'],
+        row['지문 평가2'],
+        row['지문 평가3'],
+        row['지문 평가4']
     ]
     
     sub_questions_problems = [
-        df.iloc[0]['문제 평가1'],
-        df.iloc[0]['문제 평가2'],
-        df.iloc[0]['문제 평가3']
+        row['문제 평가1'],
+        row['문제 평가2'],
+        row['문제 평가3']
     ]
     
     # None 값 제거
@@ -48,6 +48,7 @@ def sub_questions(df):
     sub_questions_problems = [item for item in sub_questions_problems if item is not None]
     
     return sub_questions_passage, sub_questions_problems
+
 
 
 
@@ -81,7 +82,11 @@ def get_data():
         # if sub_questions_TF:
         #     sub_questions_passage, sub_questions_problems = sub_questions(row)
         #     sub_questions_TF = False
-        sub_questions_passage, sub_questions_problems = sub_questions(df)
+        # sub_questions_passage, sub_questions_problems = sub_questions(df)
+        # st.write(sub_questions_passage, sub_questions_problems)
+
+        # 하위 문제 (지문 평가, 문제 평가) 받아오기
+        sub_questions_passage, sub_questions_problems = sub_questions(row)
         st.write(sub_questions_passage, sub_questions_problems)
 
 
