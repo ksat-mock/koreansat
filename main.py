@@ -326,14 +326,28 @@ def second_page():
                         # st.write(sub_q["question"])
                         st.write(sub_q)
             
+                        # # 고유한 key 생성
+                        # sub_key = f"sub_question_{st.session_state.current_tab}_{idx}_{sub_idx}"
+                        # selected_sub = st.radio(
+                        #     f"{idx + 1}-{sub_idx + 1}의 답을 선택하세요:",
+                        #     sub_q["choices"],
+                        #     index=None,
+                        #     key=sub_key
+                        # )
+
                         # 고유한 key 생성
                         sub_key = f"sub_question_{st.session_state.current_tab}_{idx}_{sub_idx}"
-                        selected_sub = st.radio(
+                        
+                        # 슬라이더로 1 ~ 5 사이 점수 선택
+                        selected_sub = st.slider(
                             f"{idx + 1}-{sub_idx + 1}의 답을 선택하세요:",
-                            sub_q["choices"],
-                            index=None,
+                            min_value=1,  # 최소 값
+                            max_value=5,  # 최대 값
+                            value=3,  # 기본값 (중간 값으로 설정)
+                            step=1,  # 1단위로 증가
                             key=sub_key
                         )
+
             
                         # 하위 문제 답안 저장
                         if f"{idx}-sub" not in st.session_state[tab_key]:
