@@ -123,7 +123,7 @@ def get_data():
         tabs_data[tab_name]["questions"].append({
             "question": row.질문,
             "choices": choices,
-            "sub_questions_passage": sub_questions_passage  # 하위 질문 추가 - 지문
+            "sub_questions_passage": sub_questions_passage,  # 하위 질문 추가 - 지문
             "sub_questions_problems": sub_questions_problems  # 하위 질문 추가 - 문제
         })
     
