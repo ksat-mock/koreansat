@@ -277,8 +277,9 @@ def second_page():
             else ""
         )
 
-        if cols[i].button(tab, key=f"tab_button_{i}"):
-            st.session_state.current_tab = tab
+        if isinstance(tab, str):
+            if cols[i].button(tab, key=f"tab_button_{i}"):
+                st.session_state.current_tab = tab
 
     current_data = tabs_data[st.session_state.current_tab]
     passage = current_data["passage"]
