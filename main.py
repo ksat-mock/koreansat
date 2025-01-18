@@ -123,7 +123,8 @@ def get_data():
         tabs_data[tab_name]["questions"].append({
             "question": row.질문,
             "choices": choices,
-            "sub_questions": sub_questions_passage + sub_questions_problems  # 하위 질문 추가
+            "sub_questions_passage": sub_questions_passage  # 하위 질문 추가 - 지문
+            "sub_questions_problems": sub_questions_problems  # 하위 질문 추가 - 문제
         })
     
         # 정답 추가 (정답이 문자열일 경우 정수로 변환)
@@ -313,11 +314,11 @@ def second_page():
                 )
 
             # 3️⃣ 하위 문제들 (세 번째 컬럼부터 순서대로 배치)
-            sub_questions = q.get("sub_questions", [])
+            sub_questions_problems = q.get("sub_questions_problems", [])
             sub_col_start = 2  # 하위 질문이 시작하는 컬럼 인덱스
             sub_col_end = len(cols)  # 컬럼의 끝 인덱스
             
-            for sub_idx, sub_q in enumerate(sub_questions):
+            for sub_idx, sub_q in enumerate(sub_questions_problems):
                 col_position = sub_col_start + sub_idx  # 순서대로 컬럼 인덱스를 계산
             
                 if col_position < sub_col_end:  # 컬럼 범위를 초과하지 않도록 제한
