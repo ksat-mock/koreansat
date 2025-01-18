@@ -31,17 +31,26 @@ def get_data():
         while True:
             # 하위 질문 컬럼명 생성
             sub_question_col = f"하위 질문{sub_idx}"
-            
-            # 하위 질문이 있는지 확인
-            if hasattr(row, sub_question_col) and getattr(row, sub_question_col):
-                sub_question_text = getattr(row, sub_question_col)
-                
-                # 하위 질문 선지 처리
+
+            sub_question_text = getattr(row, sub_question_col)
+
+            # 하위 질문 선지 처리
                 sub_choices = []
                 for i in range(1, 6):
                     choice_col = f"하위 질문{sub_idx} 선지{i}"
-                    if hasattr(row, choice_col) and getattr(row, choice_col):  # 선지가 존재할 때만 추가
-                        sub_choices.append(getattr(row, choice_col))
+                    sub_choices.append(getattr(row, choice_col))
+        
+                        
+            # 하위 질문이 있는지 확인
+            # if hasattr(row, sub_question_col) and getattr(row, sub_question_col):
+            #     sub_question_text = getattr(row, sub_question_col)
+                
+            #     # 하위 질문 선지 처리
+            #     sub_choices = []
+            #     for i in range(1, 6):
+            #         choice_col = f"하위 질문{sub_idx} 선지{i}"
+            #         if hasattr(row, choice_col) and getattr(row, choice_col):  # 선지가 존재할 때만 추가
+            #             sub_choices.append(getattr(row, choice_col))
                 
                 # 하위 질문 정답 처리
                 answer_col = f"하위 질문{sub_idx} 정답"
