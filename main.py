@@ -345,7 +345,8 @@ def second_page():
                 if col_position < sub_col_end:  # 컬럼 범위를 초과하지 않도록 제한
                     with cols[col_position]:
                         st.subheader(f"{idx + 1}-{sub_idx + 1}")
-                        st.write(sub_q["question"])
+                        # st.write(sub_q["question"])
+                        st.write(sub_q)
             
                         # 고유한 key 생성
                         sub_key = f"sub_question_{st.session_state.current_tab}_{idx}_{sub_idx}"
