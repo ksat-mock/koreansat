@@ -5,28 +5,50 @@ import os
 import json
 from streamlit_gsheets import GSheetsConnection
 
-def sub_questions(row):
-    # '지문 평가1', '지문 평가2', '지문 평가3', '지문 평가4' 값을 sub_questions_passage 리스트에 저장
+# def sub_questions(row):
+#     # '지문 평가1', '지문 평가2', '지문 평가3', '지문 평가4' 값을 sub_questions_passage 리스트에 저장
+#     sub_questions_passage = [
+#         getattr(row, '지문 평가1', None),
+#         getattr(row, '지문 평가2', None),
+#         getattr(row, '지문 평가3', None),
+#         getattr(row, '지문 평가4', None)
+#     ]
+    
+#     # '문제 평가1', '문제 평가2', '문제 평가3' 값을 sub_questions_problems 리스트에 저장
+#     sub_questions_problems = [
+#         getattr(row, '문제 평가1', None),
+#         getattr(row, '문제 평가2', None),
+#         getattr(row, '문제 평가3', None),
+#         getattr(row, '문제 평가4', None)
+#     ]
+    
+#     # None 값이 있는 경우 필터링
+#     sub_questions_passage = [item for item in sub_questions_passage if item is not None]
+#     sub_questions_problems = [item for item in sub_questions_problems if item is not None]
+    
+#     return sub_questions_passage, sub_questions_problems
+
+def sub_questions(df):
+    # 첫 번째 줄에서 데이터를 가져오기
     sub_questions_passage = [
-        getattr(row, '지문 평가1', None),
-        getattr(row, '지문 평가2', None),
-        getattr(row, '지문 평가3', None),
-        getattr(row, '지문 평가4', None)
+        df.iloc[0]['지문 평가1'],
+        df.iloc[0]['지문 평가2'],
+        df.iloc[0]['지문 평가3'],
+        df.iloc[0]['지문 평가4']
     ]
     
-    # '문제 평가1', '문제 평가2', '문제 평가3' 값을 sub_questions_problems 리스트에 저장
     sub_questions_problems = [
-        getattr(row, '문제 평가1', None),
-        getattr(row, '문제 평가2', None),
-        getattr(row, '문제 평가3', None),
-        getattr(row, '문제 평가4', None)
+        df.iloc[0]['문제 평가1'],
+        df.iloc[0]['문제 평가2'],
+        df.iloc[0]['문제 평가3']
     ]
     
-    # None 값이 있는 경우 필터링
+    # None 값 제거
     sub_questions_passage = [item for item in sub_questions_passage if item is not None]
     sub_questions_problems = [item for item in sub_questions_problems if item is not None]
     
     return sub_questions_passage, sub_questions_problems
+
 
 
 def get_data():
@@ -41,7 +63,7 @@ def get_data():
 
 
 
-    sub_questions_TF = True
+    # sub_questions_TF = True
     
     # 데이터 가공
     tabs_data = {}
@@ -55,11 +77,11 @@ def get_data():
         choices = [getattr(row, f'선지{i}') for i in range(1, 6)]
 
 
-        # 하위 문제 (지문 평가, 문제 평가) 받아오기
-        if sub_questions_TF:
-            sub_questions_passage, sub_questions_problems = sub_questions(row)
-            sub_questions_TF = False
-
+        # # 하위 문제 (지문 평가, 문제 평가) 받아오기
+        # if sub_questions_TF:
+        #     sub_questions_passage, sub_questions_problems = sub_questions(row)
+        #     sub_questions_TF = False
+        sub_questions_passage, sub_questions_problems = sub_questions(row)
         st.write(sub_questions_passage, sub_questions_problems)
 
 
