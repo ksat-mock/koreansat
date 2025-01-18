@@ -214,15 +214,36 @@ def second_page():
         if correct_status_key not in st.session_state:
             st.session_state[correct_status_key] = [None] * len(tabs_data[tab_idx]["questions"])  # 각 문제별 정답 여부 초기화
 
+        # # 하위 문제 답안 세션 초기화
+        # subquestions_key = f"subquestions_tab{tab_idx}"
+        # if subquestions_key not in st.session_state:
+        #     # 하위 문제를 딕셔너리로 정의하여 초기화
+        #     st.session_state[subquestions_key] = {
+        #         f"subq_{q_idx+1}": [None] * len(question["subquestions"])
+        #         for q_idx, question in enumerate(tabs_data[tab_idx]["questions"])
+        #         if "subquestions" in question  # 하위 문제가 있는 경우만 처리
+        #     }
+
         # 하위 문제 답안 세션 초기화
-        subquestions_key = f"subquestions_tab{tab_idx}"
-        if subquestions_key not in st.session_state:
-            # 하위 문제를 딕셔너리로 정의하여 초기화
-            st.session_state[subquestions_key] = {
-                f"subq_{q_idx+1}": [None] * len(question["subquestions"])
+        passage_key = f"subquestions_passage_tab{tab_idx}"
+        problems_key = f"subquestions_problems_tab{tab_idx}"
+        
+        # 지문 평가 세션 초기화
+        if passage_key not in st.session_state:
+            st.session_state[passage_key] = {
+                f"passage_q{q_idx+1}": [None] * len(question["sub_questions_passage"])
                 for q_idx, question in enumerate(tabs_data[tab_idx]["questions"])
-                if "subquestions" in question  # 하위 문제가 있는 경우만 처리
+                if "sub_questions_passage" in question  # 지문 평가 질문이 있는 경우만 처리
             }
+        
+        # 문제 평가 세션 초기화
+        if problems_key not in st.session_state:
+            st.session_state[problems_key] = {
+                f"problems_q{q_idx+1}": [None] * len(question["sub_questions_problems"])
+                for q_idx, question in enumerate(tabs_data[tab_idx]["questions"])
+                if "sub_questions_problems" in question  # 문제 평가 질문이 있는 경우만 처리
+            }
+
 
 
     
@@ -350,12 +371,40 @@ def second_page():
                         )
 
             
-                        # 하위 문제 답안 저장
-                        if f"{idx}-sub" not in st.session_state[tab_key]:
-                            st.session_state[tab_key][f"{idx}-sub"] = {}
-                        st.session_state[tab_key][f"{idx}-sub"][f"{sub_idx}"] = (
-                            sub_q["choices"].index(selected_sub) if selected_sub else None
-                        )
+                        # # 하위 문제 답안 저장
+                        # if f"{idx}-sub" not in st.session_state[tab_key]:
+                        #     st.session_state[tab_key][f"{idx}-sub"] = {}
+                        # st.session_state[tab_key][f"{idx}-sub"][f"{sub_idx}"] = (
+                        #     sub_q["choices"].index(selected_sub) if selected_sub else None
+                        # )
+
+
+                        # 지문 평가 답안 저장
+                        for passage_q_key, sub_answers in st.session_state[passage_key].items():
+                            for sub_idx, _ in enumerate(sub_answers):
+                                sub_answer_key = f"{passage_q_key}_sub{sub_idx+1}"
+                                st.session_state[passage_key][passage_q_key][sub_idx] = st.slider(
+                                    f"지문 평가 {passage_q_key} - {sub_idx+1}",
+                                    min_value=1,
+                                    max_value=5,
+                                    value=3,
+                                    step=1,
+                                    key=sub_answer_key
+                                )
+                        
+                        # 문제 평가 답안 저장
+                        for problems_q_key, sub_answers in st.session_state[problems_key].items():
+                            for sub_idx, _ in enumerate(sub_answers):
+                                sub_answer_key = f"{problems_q_key}_sub{sub_idx+1}"
+                                st.session_state[problems_key][problems_q_key][sub_idx] = st.slider(
+                                    f"문제 평가 {problems_q_key} - {sub_idx+1}",
+                                    min_value=1,
+                                    max_value=5,
+                                    value=3,
+                                    step=1,
+                                    key=sub_answer_key
+                                )
+
 
     
             # 3️⃣ 하위 문제들 (세 번째 컬럼부터 오른쪽에 배치)
