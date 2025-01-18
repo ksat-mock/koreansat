@@ -59,7 +59,23 @@ def first_page():
 
 # 두 번째 페이지: 문제 풀이 페이지
 def second_page():
-    st.set_page_config(layout="wide")
+    # st.set_page_config(layout="wide")
+    st.markdown(
+        """
+        <style>
+        .horizontal-scroll {
+            display: flex;
+            overflow-x: auto;
+        }
+        .horizontal-scroll > div {
+            flex: 0 0 auto;
+            margin-right: 10px;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
 
     tabs_data = tabs_data = get_data()
 
@@ -143,16 +159,17 @@ def second_page():
     st.title("국어 영역")
     st.markdown("  ")
 
-    # 지문과 문제를 두 열로 나누기 (너비 비율 조정)
-    left_col, right_col = st.columns([3, 4])
 
-    # 왼쪽 열: 지문 출력
-    with left_col:
+
+    
+    with st.container():
+    cols = st.columns([1.5, 1, 1, 1, 1, 1])
+
+    with cols[0]:
         st.header("지문")
         st.write(passage)
 
-    # 오른쪽 열: 문제 출력 및 답안 선택
-    with right_col:
+    with cols[1]:
         # 현재 탭에 해당하는 문제 리스트와 답안 리스트를 가져오기
         for idx, q in enumerate(tabs_data[st.session_state.current_tab]["questions"]):
             st.subheader(q["question"])
@@ -163,6 +180,52 @@ def second_page():
             st.session_state[tab_key][idx] = q["choices"].index(selected) if selected else None
 
             st.markdown("  ")
+
+    with cols[2]:
+        # 현재 탭에 해당하는 문제 리스트와 답안 리스트를 가져오기
+        for idx, q in enumerate(tabs_data[st.session_state.current_tab]["questions"]):
+            st.subheader(q["question"])
+            selected = st.radio(f"문제 {idx + 1}의 답을 선택하세요:", q["choices"], index=None, key=f"question_{idx}")
+
+            # 현재 탭에 해당하는 키에 답안을 저장
+            tab_key = f"answers_tab{st.session_state.current_tab}"
+            st.session_state[tab_key][idx] = q["choices"].index(selected) if selected else None
+
+            st.markdown("  ")
+
+    with cols[3]:
+        st.write("컬럼 4 (비율 1)")
+
+    with cols[4]:
+        st.write("컬럼 5 (비율 1)")
+
+    with cols[5]:
+        st.write("컬럼 6 (비율 1)")
+
+
+
+    
+
+    # # 지문과 문제를 두 열로 나누기 (너비 비율 조정)
+    # left_col, right_col = st.columns([3, 4])
+
+    # # 왼쪽 열: 지문 출력
+    # with left_col:
+    #     st.header("지문")
+    #     st.write(passage)
+
+    # # 오른쪽 열: 문제 출력 및 답안 선택
+    # with right_col:
+    #     # 현재 탭에 해당하는 문제 리스트와 답안 리스트를 가져오기
+    #     for idx, q in enumerate(tabs_data[st.session_state.current_tab]["questions"]):
+    #         st.subheader(q["question"])
+    #         selected = st.radio(f"문제 {idx + 1}의 답을 선택하세요:", q["choices"], index=None, key=f"question_{idx}")
+
+    #         # 현재 탭에 해당하는 키에 답안을 저장
+    #         tab_key = f"answers_tab{st.session_state.current_tab}"
+    #         st.session_state[tab_key][idx] = q["choices"].index(selected) if selected else None
+
+    #         st.markdown("  ")
 
     # 제출 버튼
     if st.button("답안 제출하기"):
