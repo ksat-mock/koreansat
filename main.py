@@ -235,17 +235,20 @@ def second_page():
                 st.session_state[tab_key][idx] = (
                     q["choices"].index(selected_main) if selected_main else None
                 )
-    
-            # 3️⃣ 하위 문제들 (세 번째 컬럼부터 오른쪽에 배치)
+
+            # 3️⃣ 하위 문제들 (세 번째 컬럼부터 순서대로 배치)
             sub_questions = q.get("sub_questions", [])
+            sub_col_start = 2  # 하위 질문이 시작하는 컬럼 인덱스
+            sub_col_end = len(cols)  # 컬럼의 끝 인덱스
+            
             for sub_idx, sub_q in enumerate(sub_questions):
-                col_position = sub_idx + 2  # 세 번째 컬럼부터 배치
-    
-                if col_position < len(cols):  # 컬럼 범위를 초과하지 않도록
+                col_position = sub_col_start + sub_idx  # 순서대로 컬럼 인덱스를 계산
+            
+                if col_position < sub_col_end:  # 컬럼 범위를 초과하지 않도록 제한
                     with cols[col_position]:
                         st.subheader(f"{idx + 1}-{sub_idx + 1}")
                         st.write(sub_q["question"])
-    
+            
                         # 고유한 key 생성
                         sub_key = f"sub_question_{st.session_state.current_tab}_{idx}_{sub_idx}"
                         selected_sub = st.radio(
@@ -254,13 +257,40 @@ def second_page():
                             index=None,
                             key=sub_key
                         )
-    
+            
                         # 하위 문제 답안 저장
                         if f"{idx}-sub" not in st.session_state[tab_key]:
                             st.session_state[tab_key][f"{idx}-sub"] = {}
                         st.session_state[tab_key][f"{idx}-sub"][f"{sub_idx}"] = (
                             sub_q["choices"].index(selected_sub) if selected_sub else None
                         )
+
+    
+            # 3️⃣ 하위 문제들 (세 번째 컬럼부터 오른쪽에 배치)
+            # sub_questions = q.get("sub_questions", [])
+            # for sub_idx, sub_q in enumerate(sub_questions):
+            #     col_position = sub_idx + 2  # 세 번째 컬럼부터 배치
+    
+            #     if col_position < len(cols):  # 컬럼 범위를 초과하지 않도록
+            #         with cols[col_position]:
+            #             st.subheader(f"{idx + 1}-{sub_idx + 1}")
+            #             st.write(sub_q["question"])
+    
+            #             # 고유한 key 생성
+            #             sub_key = f"sub_question_{st.session_state.current_tab}_{idx}_{sub_idx}"
+            #             selected_sub = st.radio(
+            #                 f"{idx + 1}-{sub_idx + 1}의 답을 선택하세요:",
+            #                 sub_q["choices"],
+            #                 index=None,
+            #                 key=sub_key
+            #             )
+    
+            #             # 하위 문제 답안 저장
+            #             if f"{idx}-sub" not in st.session_state[tab_key]:
+            #                 st.session_state[tab_key][f"{idx}-sub"] = {}
+            #             st.session_state[tab_key][f"{idx}-sub"][f"{sub_idx}"] = (
+            #                 sub_q["choices"].index(selected_sub) if selected_sub else None
+            #             )
 
 
 
