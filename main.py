@@ -148,7 +148,7 @@ def get_data():
 
         # 정답이 NaN이 아니면 정수로 변환
         correct_answer = row.정답
-        if pd.notna(correct_answer):  # NaN이 아닌지 확인
+        if not math.isnan(correct_answer):  # NaN이 아닌지 확인
             tabs_data[tab_name]["correct_answers"].append(int(correct_answer))
     
     return tabs_data
