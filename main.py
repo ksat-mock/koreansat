@@ -305,8 +305,6 @@ def second_page():
                                     key=sub_key
                                 )
 
-                            st.write(st.session_state[passage_key][problems_q_key][sub_idx])
-
                             # 배경색 div 종료
                             st.markdown('</div>', unsafe_allow_html=True)
 
@@ -366,78 +364,84 @@ def second_page():
                         st.markdown('</div>', unsafe_allow_html=True)
 
 
-                        
-                        # # 문제 평가 답안 저장
-                        # for problems_q_key, sub_answers in st.session_state[problems_key].items():
-                        #     for sub_idx, _ in enumerate(sub_answers):
-                        #         sub_answer_key = f"{problems_q_key}_sub{sub_idx+1}"
-                        #         st.session_state[problems_key][problems_q_key][sub_idx] = st.slider(
-                        #             f"문제 평가 {problems_q_key} - {sub_idx+1}",
-                        #             min_value=1,
-                        #             max_value=5,
-                        #             value=3,
-                        #             step=1,
-                        #             key=sub_answer_key
-                        #         )
-    
-            # break
 
 
-    # 제출 버튼
-    if st.button("답안 제출하기"):
-        submitted_key = f"submitted_tab{st.session_state.current_tab}"
-        st.session_state[submitted_key] = True
-        submitted_key_2 = f"submitted_tab{st.session_state.current_tab}_2"
-        st.session_state[submitted_key_2] += 1
+    with st.container():
+        cols = st.columns([3, 2, 1, 1, 1, 1])
 
-    if st.session_state.get(f"submitted_tab{st.session_state.current_tab}", False):
-        st.success("답안이 제출되었습니다!")
+        with cols[0]:
+            # 제출 버튼
+            if st.button("답안 제출하기"):
+                submitted_key = f"submitted_tab{st.session_state.current_tab}"
+                st.session_state[submitted_key] = True
+                submitted_key_2 = f"submitted_tab{st.session_state.current_tab}_2"
+                st.session_state[submitted_key_2] += 1
+        
+            if st.session_state.get(f"submitted_tab{st.session_state.current_tab}", False):
+                st.success("답안이 제출되었습니다!")
+        
+                # 지문과 문제를 두 열로 나누기 (너비 비율 조정)
+                left_col_2, right_col_2 = st.columns([3, 4])
+        
+                with left_col_2:
+                    # 선택한 답안 표시
+                    # st.subheader("선택한 답안:")
+                    tab_key = f"answers_tab{st.session_state.current_tab}"
+        
+                    for idx, answer in enumerate(st.session_state[tab_key]):
+                        selected_choice = answer + 1 if answer is not None else "선택 안 함"
+                        # st.write(f"문제 {idx + 1}: {selected_choice}")
+                    st.write("   ")
+        
+                with right_col_2:
+                    # 답안 비교 및 정답 확인
+                    # st.subheader("정답 확인:")
+        
+                    # 탭에 해당하는 correct_answers 가져오기
+                    correct_answers = tabs_data[st.session_state.current_tab]["correct_answers"]
+                    tab_key = f"answers_tab{st.session_state.current_tab}"
+                    correct_status_key = f"correct_status_tab{st.session_state.current_tab}"
+        
+                    # 제출한 답안과 정답 비교
+                    result = []
+                    for idx, answer in enumerate(st.session_state[tab_key]):
+                        # 정답 여부를 correct_status에 저장
+                        is_correct = answer == correct_answers[idx] -1
+                        st.session_state[correct_status_key][idx] = is_correct
+        
+                        correct = "맞았습니다" if is_correct else "틀렸습니다"
+                        # st.write(f"문제 {idx + 1}: {correct}")
+                        result.append(f"문제 {idx + 1}: {correct}")
+        
+                    st.session_state[submitted_key] = False
+        
+            if st.session_state[submitted_key] == False and st.session_state[f"submitted_tab{st.session_state.current_tab}_2"] > 0:
+                # st.info를 사용하여 결과를 표시
+                # st.info("\n".join(result))  # 정답 여부를 한 번에 보여줌
+                # st.info(st.session_state[f'correct_status_tab{st.session_state.current_tab}'])
+                for idx, each_result in enumerate(st.session_state[f'correct_status_tab{st.session_state.current_tab}']):
+                    if each_result == False:
+                        st.info(f"문제 {idx + 1}: 틀렸습니다.")
+                    else:
+                        st.info(f"문제 {idx + 1}: 맞았습니다.")
 
-        # 지문과 문제를 두 열로 나누기 (너비 비율 조정)
-        left_col_2, right_col_2 = st.columns([3, 4])
 
-        with left_col_2:
-            # 선택한 답안 표시
-            # st.subheader("선택한 답안:")
-            tab_key = f"answers_tab{st.session_state.current_tab}"
+        with cols[2]:
+            # '평가 제출하기' 버튼 추가
+            if st.button("평가 제출하기"):
+                # 지문 및 문제 관련 평가 값들이 이미 세션에 저장되어 있으므로
+                # 추가적인 작업 없이 완료 메시지 출력
+                st.success("지문 및 문제 평가를 완료하였습니다!")
+            
+                # '평가 제출하기' 버튼과 '답안 제출하기' 버튼을 동일한 높이에 위치하게 설정
+                # 버튼 아래로 메시지가 띄워짐
+                st.session_state[f"evaluation_submitted_tab{st.session_state.current_tab}"] = True
+            
+            # 평가 제출 여부를 체크하여 메시지 표시
+            if st.session_state.get(f"evaluation_submitted_tab{st.session_state.current_tab}", False):
+                st.success("지문 및 문제 평가를 완료하였습니다!")
 
-            for idx, answer in enumerate(st.session_state[tab_key]):
-                selected_choice = answer + 1 if answer is not None else "선택 안 함"
-                # st.write(f"문제 {idx + 1}: {selected_choice}")
-            st.write("   ")
-
-        with right_col_2:
-            # 답안 비교 및 정답 확인
-            # st.subheader("정답 확인:")
-
-            # 탭에 해당하는 correct_answers 가져오기
-            correct_answers = tabs_data[st.session_state.current_tab]["correct_answers"]
-            tab_key = f"answers_tab{st.session_state.current_tab}"
-            correct_status_key = f"correct_status_tab{st.session_state.current_tab}"
-
-            # 제출한 답안과 정답 비교
-            result = []
-            for idx, answer in enumerate(st.session_state[tab_key]):
-                # 정답 여부를 correct_status에 저장
-                is_correct = answer == correct_answers[idx] -1
-                st.session_state[correct_status_key][idx] = is_correct
-
-                correct = "맞았습니다" if is_correct else "틀렸습니다"
-                # st.write(f"문제 {idx + 1}: {correct}")
-                result.append(f"문제 {idx + 1}: {correct}")
-
-            st.session_state[submitted_key] = False
-
-    if st.session_state[submitted_key] == False and st.session_state[f"submitted_tab{st.session_state.current_tab}_2"] > 0:
-        # st.info를 사용하여 결과를 표시
-        # st.info("\n".join(result))  # 정답 여부를 한 번에 보여줌
-        # st.info(st.session_state[f'correct_status_tab{st.session_state.current_tab}'])
-        for idx, each_result in enumerate(st.session_state[f'correct_status_tab{st.session_state.current_tab}']):
-            if each_result == False:
-                st.info(f"문제 {idx + 1}: 틀렸습니다.")
-            else:
-                st.info(f"문제 {idx + 1}: 맞았습니다.")
-
+            
     st.write("   ")
 
     # 피드백 제출 처리 함수
@@ -460,6 +464,8 @@ def second_page():
     if f'feedback_tab{st.session_state.current_tab}' not in st.session_state:
         st.session_state[f'feedback_tab{st.session_state.current_tab}'] = ""
 
+
+    
     # 가로 선 추가
     st.divider()
 
