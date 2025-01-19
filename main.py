@@ -268,7 +268,7 @@ def second_page():
                         for problems_q_key, sub_answers in st.session_state[problems_key].items():
                             # for sub_idx, _ in enumerate(sub_answers):
                             sub_key = f"sub_question_{idx + 1}_{problems_q_key}_sub{sub_idx+1}"
-                            if not math.isnan(sub_sub["sub_sub_questions_problems"][sub_idx]):
+                            if sub_sub["sub_sub_questions_problems"][sub_idx] is not None:
                                 sub_question = sub_sub["sub_sub_questions_problems"][sub_idx]
                             else:
                                 sub_question = " "
