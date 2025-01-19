@@ -272,6 +272,9 @@ def second_page():
                                     border-radius: 5px;         /* 둥근 모서리 */
                                     margin-bottom: 10px;        /* 하단 여백 */
                                 }
+                                .sub-question-container h6 {
+                                    margin-bottom: 10px;        /* 제목과 내용 간의 간격 */
+                                }
                             </style>
                         """, unsafe_allow_html=True)
             
