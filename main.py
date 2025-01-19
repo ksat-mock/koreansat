@@ -271,7 +271,7 @@ def second_page():
                             st.markdown("""
                                 <style>
                                     .sub-question-container-1 {
-                                        background-color: #d0d0d0;  /* 배경색 설정 */
+                                        background-color: #d6d6d6;  /* 배경색 설정 */
                                         padding: 10px;              /* 내부 여백 */
                                         border-radius: 5px;         /* 둥근 모서리 */
                                         margin-bottom: 10px;        /* 하단 여백 */
@@ -326,7 +326,7 @@ def second_page():
                         st.markdown("""
                             <style>
                                 .sub-question-container-2 {
-                                    background-color: #f0f0f0;  /* 배경색 설정 */
+                                    background-color: #e7e7e7;  /* 배경색 설정 */
                                     padding: 10px;              /* 내부 여백 */
                                     border-radius: 5px;         /* 둥근 모서리 */
                                     margin-bottom: 10px;        /* 하단 여백 */
