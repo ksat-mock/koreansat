@@ -497,8 +497,8 @@ def second_page():
 
                 st.write(st.session_state.get(passage_key, {}))
                 st.write(st.session_state.get(f"subquestions_problems_tab{tab_idx}", {}))
-                st.write(st.session_state[passage_key][problems_q_key])
-                st.write(st.session_state[problems_key][problems_q_key])
+                st.write(st.session_state[passage_key]["passage_q1"])
+                st.write(st.session_state[problems_key]["passage_q1"])
             
                 # 평가 완료 여부에 대한 메시지 출력
                 if all_selected:
