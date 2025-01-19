@@ -254,58 +254,59 @@ def second_page():
 
 
             # 3️⃣ 하위 문제 - 지문 관련
-            sub_questions_passage = q.get("sub_questions_passage", [])
-            sub_col_start = 2  # 하위 질문이 시작하는 컬럼 인덱스
-            sub_col_end = len(cols)  # 컬럼의 끝 인덱스
-            
-            for sub_idx, sub_q in enumerate(sub_questions_passage):
-                col_position = sub_col_start + sub_idx  # 순서대로 컬럼 인덱스를 계산
-            
-                if col_position < sub_col_end:  # 컬럼 범위를 초과하지 않도록 제한
-                    with cols[col_position]:
-                        
-                        # 배경색을 추가하기 위한 스타일 적용
-                        st.markdown("""
-                            <style>
-                                .sub-question-container {
-                                    background-color: #b0b0b0;  /* 배경색 설정 */
-                                    padding: 10px;              /* 내부 여백 */
-                                    border-radius: 5px;         /* 둥근 모서리 */
-                                    margin-bottom: 10px;        /* 하단 여백 */
-                                }
-                                .sub-question-container h6 {
-                                    margin-bottom: 10px;        /* 제목과 내용 간의 간격 */
-                                }
-                            </style>
-                        """, unsafe_allow_html=True)
-            
-                        # 하위 문제 영역을 div로 감싸서 배경색 적용
-                        st.markdown('<div class="sub-question-container">', unsafe_allow_html=True)
-                        
-                        # 문제 제목
-                        st.markdown(f"<h6>지문 평가 {idx + 1}-{sub_idx + 1}</h6>", unsafe_allow_html=True)
-                        st.markdown(f"<h6>{sub_q}</h6>", unsafe_allow_html=True)
-            
-                        # 고유한 key 생성 및 라디오 버튼으로 점수 선택
-                        for problems_q_key, sub_answers in st.session_state[passage_key].items():
-                            sub_key = f"sub_question_{idx + 1}_{problems_q_key}_sub{sub_idx+1}"
-            
-                            # NaN 또는 None 확인 및 처리
-                            sub_passage_value = sub_sub["sub_sub_questions_passage"][sub_idx]
-                            if sub_passage_value is not None and not (isinstance(sub_passage_value, float) and math.isnan(sub_passage_value)):
-                                sub_question = f"({sub_passage_value})"
-                            else:
-                                sub_question = " "  # 빈 문자열로 대체
-            
-                            st.session_state[passage_key][problems_q_key][sub_idx] = st.radio(
-                                sub_question,
-                                options=[1, 2, 3, 4, 5],  # 1부터 5까지 선택 가능
-                                index=None,  # 기본값 없음
-                                key=sub_key
-                            )
-            
-                        # 배경색 div 종료
-                        st.markdown('</div>', unsafe_allow_html=True)
+            if idx == 0:  # 첫 번째 문제에서만 지문 관련 질문을 출력
+                sub_questions_passage = q.get("sub_questions_passage", [])
+                sub_col_start = 2  # 하위 질문이 시작하는 컬럼 인덱스
+                sub_col_end = len(cols)  # 컬럼의 끝 인덱스
+                
+                for sub_idx, sub_q in enumerate(sub_questions_passage):
+                    col_position = sub_col_start + sub_idx  # 순서대로 컬럼 인덱스를 계산
+                
+                    if col_position < sub_col_end:  # 컬럼 범위를 초과하지 않도록 제한
+                        with cols[col_position]:
+                            
+                            # 배경색을 추가하기 위한 스타일 적용
+                            st.markdown("""
+                                <style>
+                                    .sub-question-container-1 {
+                                        background-color: #c0c0c0;  /* 배경색 설정 */
+                                        padding: 10px;              /* 내부 여백 */
+                                        border-radius: 5px;         /* 둥근 모서리 */
+                                        margin-bottom: 10px;        /* 하단 여백 */
+                                    }
+                                    .sub-question-container-1 h6 {
+                                        margin-bottom: 10px;        /* 제목과 내용 간의 간격 */
+                                    }
+                                </style>
+                            """, unsafe_allow_html=True)
+                
+                            # 하위 문제 영역을 div로 감싸서 배경색 적용
+                            st.markdown('<div class="sub-question-container-1">', unsafe_allow_html=True)
+                            
+                            # 문제 제목
+                            st.markdown(f"<h6>지문 평가 {idx + 1}-{sub_idx + 1}</h6>", unsafe_allow_html=True)
+                            st.markdown(f"<h6>{sub_q}</h6>", unsafe_allow_html=True)
+                
+                            # 고유한 key 생성 및 라디오 버튼으로 점수 선택
+                            for problems_q_key, sub_answers in st.session_state[passage_key].items():
+                                sub_key = f"sub_question_{idx + 1}_{problems_q_key}_sub{sub_idx+1}"
+                
+                                # NaN 또는 None 확인 및 처리
+                                sub_passage_value = sub_sub["sub_sub_questions_passage"][sub_idx]
+                                if sub_passage_value is not None and not (isinstance(sub_passage_value, float) and math.isnan(sub_passage_value)):
+                                    sub_question = f"({sub_passage_value})"
+                                else:
+                                    sub_question = " "  # 빈 문자열로 대체
+                
+                                st.session_state[passage_key][problems_q_key][sub_idx] = st.radio(
+                                    sub_question,
+                                    options=[1, 2, 3, 4, 5],  # 1부터 5까지 선택 가능
+                                    index=None,  # 기본값 없음
+                                    key=sub_key
+                                )
+                
+                            # 배경색 div 종료
+                            st.markdown('</div>', unsafe_allow_html=True)
 
 
             # 3️⃣ 하위 문제 - 문제 관련 (세 번째 컬럼부터 순서대로 배치)
@@ -322,20 +323,20 @@ def second_page():
                         # 배경색을 추가하기 위한 스타일 적용
                         st.markdown("""
                             <style>
-                                .sub-question-container {
-                                    background-color: #e0e0e0;  /* 배경색 설정 */
+                                .sub-question-container-2 {
+                                    background-color: #f0f0f0;  /* 배경색 설정 */
                                     padding: 10px;              /* 내부 여백 */
                                     border-radius: 5px;         /* 둥근 모서리 */
                                     margin-bottom: 10px;        /* 하단 여백 */
                                 }
-                                .sub-question-container h6 {
+                                .sub-question-container-2 h6 {
                                     margin-bottom: 10px;        /* 제목과 내용 간의 간격 */
                                 }
                             </style>
                         """, unsafe_allow_html=True)
             
                         # 하위 문제 영역을 div로 감싸서 배경색 적용
-                        st.markdown('<div class="sub-question-container">', unsafe_allow_html=True)
+                        st.markdown('<div class="sub-question-container-2">', unsafe_allow_html=True)
                         
                         # 문제 제목
                         st.markdown(f"<h6>문제 평가 {idx + 1}-{sub_idx + 1}</h6>", unsafe_allow_html=True)
