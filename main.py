@@ -231,11 +231,13 @@ def second_page():
         # 딕셔너리로 초기화
         # if tab_key not in st.session_state:
         #     st.session_state[tab_key] = {}
-    
+
+        with cols[1]:
+            st.markdown(f"<h5>문제 {idx + 1}</h6>", unsafe_allow_html=True)
+            
         for idx, q in enumerate(questions):
             with cols[1]:
-                # st.subheader(f"문제 {idx + 1}")
-                st.markdown(f"<h5>문제 {idx + 1}</h6>", unsafe_allow_html=True)
+                # st.markdown(f"<h5>문제 {idx + 1}</h6>", unsafe_allow_html=True)
                 st.write(q["question"])
     
                 # 문제 답변 선택
@@ -284,7 +286,7 @@ def second_page():
                             st.markdown('<div class="sub-question-container-1">', unsafe_allow_html=True)
                             
                             # 문제 제목
-                            st.markdown(f"<h6>지문 평가 {idx + 1}-{sub_idx + 1}</h6>", unsafe_allow_html=True)
+                            st.markdown(f"<h6>[지문] 평가 {sub_idx + 1}.</h6>", unsafe_allow_html=True)
                             st.markdown(f"<h6>{sub_q}</h6>", unsafe_allow_html=True)
 
                             passage_key = f"subquestions_passage_tab{st.session_state.current_tab}"
@@ -339,7 +341,7 @@ def second_page():
                         st.markdown('<div class="sub-question-container-2">', unsafe_allow_html=True)
                         
                         # 문제 제목
-                        st.markdown(f"<h6>문제 평가 {idx + 1}-{sub_idx + 1}</h6>", unsafe_allow_html=True)
+                        st.markdown(f"<h6>[문제] 평가 {idx + 1}-{sub_idx + 1}.</h6>", unsafe_allow_html=True)
                         st.markdown(f"<h6>{sub_q}</h6>", unsafe_allow_html=True)
 
                         problems_key = f"subquestions_problems_tab{st.session_state.current_tab}"
@@ -472,8 +474,6 @@ def second_page():
             
                 # 현재 탭에 대한 지문 관련 문제와 문제 관련 문제 체크
                 tab_idx = st.session_state.current_tab  # 현재 탭 가져오기
-                st.write(tab_idx)
-                st.write("dddD")
                 passage_key = f"subquestions_passage_tab{tab_idx}"
                 problems_key = f"subquestions_problems_tab{tab_idx}"
             
@@ -513,7 +513,6 @@ def second_page():
 
     st.write("   ")
 
-    st.write(st.session_state)  # 전체 세션 상태 확인
 
     # 피드백 제출 처리 함수
     def submit_feedback():
@@ -534,8 +533,6 @@ def second_page():
 
     if f'feedback_tab{st.session_state.current_tab}' not in st.session_state:
         st.session_state[f'feedback_tab{st.session_state.current_tab}'] = ""
-
-
     
     # 가로 선 추가
     st.divider()
@@ -544,7 +541,7 @@ def second_page():
     st.write("   ")
     st.write("   ")
     st.write("   ")
-    st.subheader(f"{st.session_state.current_tab} 탭 피드백을 남겨주세요.")  # 현재 탭에 맞는 제목
+    st.subheader(f"[{st.session_state.current_tab}] 지문 및 문제에 대한 전반적인 피드백을 남겨주세요.")  # 현재 탭에 맞는 제목
 
     # 각 탭별로 고유한 key를 설정하여 피드백 입력 창 만들기
     feedback_input_key = f"feedback_input_{st.session_state.current_tab}"
