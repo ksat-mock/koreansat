@@ -232,12 +232,12 @@ def second_page():
         for idx, q in enumerate(questions):
             with cols[1]:
                 st.subheader(f"문제 {idx + 1}")
-                st.write(q["question"])
+                # st.write(q["question"])
     
                 # 문제 답변 선택
                 main_key = f"main_question_{st.session_state.current_tab}_{idx}"
                 selected_main = st.radio(
-                    # f"문제 {idx + 1}의 답을 선택하세요:",
+                    f"{q["question"]}",
                     options = q["choices"],
                     index=None,
                     key=main_key
