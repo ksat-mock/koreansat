@@ -262,7 +262,7 @@ def second_page():
                             st.session_state[problems_key][problems_q_key][sub_idx] = st.radio(
                                 f"문제 평가 {problems_q_key} - {sub_idx + 1}의 답을 선택하세요:",
                                 options=[1, 2, 3, 4, 5],  # 1부터 5까지 선택 가능
-                                index=2,  # 기본값 (3으로 설정)
+                                # index=2,  # 기본값 (3으로 설정)
                                 key=sub_key
                             )
 
