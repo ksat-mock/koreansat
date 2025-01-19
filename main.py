@@ -14,8 +14,8 @@ def get_data():
     # 매번 최신 데이터를 읽어오도록 설정
     df = conn.read(clear_cache=True)  # 캐시 비우고 새로 읽어오기
 
-    sub_TF = False
-    sub_sub_TF = False
+    sub_TF = 0
+    sub_sub_TF = 0
     
     # 데이터 가공
     tabs_data = {}
@@ -31,16 +31,17 @@ def get_data():
         choices = [getattr(row, f'선지{i}') for i in range(1, 6)]
 
         # 하위 문제 (지문 평가, 문제 평가) 받아오기
-        if not sub_TF and row.지문평가1:
-            sub_questions_passage = [row.지문평가1, row.지문평가2, row.지문평가3, row.지문평가4]
-            sub_questions_problems = [row.문제평가1, row.문제평가2, row.문제평가3, row.지문평가4]
-            sub_TF = True
+        if sub_TF <= 1 and row.지문평가1:
+            if sub_TF == 0
+                sub_questions_passage = [row.지문평가1, row.지문평가2, row.지문평가3, row.지문평가4]
+                sub_questions_problems = [row.문제평가1, row.문제평가2, row.문제평가3, row.지문평가4]
+            sub_TF += 1
 
         # 하위 문제 부연설명 받아오기
-        if not sub_sub_TF and sub_TF and row.지문평가1:
+        if sub_sub_TF == 0 and sub_TF == 2 and row.지문평가1:
             sub_sub["sub_sub_questions_passage"] = [row.지문평가1, row.지문평가2, row.지문평가3, row.지문평가4]
             sub_sub["sub_sub_questions_problems"] = [row.문제평가1, row.문제평가2, row.문제평가3, row.지문평가4]
-            sub_sub_TF = True
+            sub_sub_TF += 1
         
     
         # 질문 추가
