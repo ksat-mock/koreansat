@@ -265,7 +265,7 @@ def second_page():
                         st.markdown(f"<h6>문제 평가 {idx + 1}-{sub_idx + 1}</h6>", unsafe_allow_html=True)
                         # st.markdown(f"<p style='font-size:14px; font-weight:bold;'>문제 평가 {idx + 1}-{sub_idx + 1}</p>", unsafe_allow_html=True)
                         # st.write(sub_q["question"])
-                        st.write(sub_q)
+                        # st.write(sub_q)
                         st.markdown(f"<h6>{sub_q}</h6>", unsafe_allow_html=True)
 
                         # 고유한 key 생성 및 라디오 버튼으로 점수 선택
