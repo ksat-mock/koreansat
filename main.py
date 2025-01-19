@@ -309,6 +309,9 @@ def second_page():
                                 index=None,  # 기본값 없음
                                 key=sub_key
                             )
+                            
+                        # 배경색 div 종료
+                        st.markdown('</div>', unsafe_allow_html=True)
 
 
                         
