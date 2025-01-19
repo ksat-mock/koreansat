@@ -511,6 +511,8 @@ def second_page():
                 st.write("DDDDD")
                 st.write(f"{st.session_state[problems_key][problems_q_key]}")
                 st.write(st.session_state[problems_key][problems_q_key])
+                st.write(st.session_state)  # 전체 세션 상태 확인
+
             
                 # 평가 완료 여부에 대한 메시지 출력
                 if all_selected:
