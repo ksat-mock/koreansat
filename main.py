@@ -268,7 +268,7 @@ def second_page():
                             sub_key = f"sub_question_{idx + 1}_{problems_q_key}_sub{sub_idx+1}"
                             st.session_state[problems_key][problems_q_key][sub_idx] = st.radio(
                                 # f"문제 평가 {problems_q_key} - {sub_idx + 1}의 답을 선택하세요:",
-                                f"{tabs_data[tab_name]["questions"]["sub_sub_questions_problems][sub_idx]"}",
+                                f"{tabs_data[tab_name]["questions"]["sub_sub_questions_problems"][sub_idx]"}",
                                 options=[1, 2, 3, 4, 5],  # 1부터 5까지 선택 가능
                                 index=None,  # 기본값 없음
                                 key=sub_key
