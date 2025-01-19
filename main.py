@@ -286,6 +286,8 @@ def second_page():
                             # 문제 제목
                             st.markdown(f"<h6>지문 평가 {idx + 1}-{sub_idx + 1}</h6>", unsafe_allow_html=True)
                             st.markdown(f"<h6>{sub_q}</h6>", unsafe_allow_html=True)
+
+                            passage_key = f"subquestions_passage_tab{st.session_state.current_tab}"
                 
                             # 고유한 key 생성 및 라디오 버튼으로 점수 선택
                             for problems_q_key, sub_answers in st.session_state[passage_key].items():
@@ -339,6 +341,8 @@ def second_page():
                         # 문제 제목
                         st.markdown(f"<h6>문제 평가 {idx + 1}-{sub_idx + 1}</h6>", unsafe_allow_html=True)
                         st.markdown(f"<h6>{sub_q}</h6>", unsafe_allow_html=True)
+
+                        problems_key = f"subquestions_problems_tab{st.session_state.current_tab}"
             
                         # 고유한 key 생성 및 라디오 버튼으로 점수 선택
                         for problems_q_key, sub_answers in st.session_state[problems_key].items():
