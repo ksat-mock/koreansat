@@ -5,6 +5,7 @@ import os
 import json
 from streamlit_gsheets import GSheetsConnection
 import math
+import pandas as pd
 
 
 def get_data():
