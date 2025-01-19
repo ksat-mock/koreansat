@@ -14,8 +14,6 @@ def get_data():
     # 매번 최신 데이터를 읽어오도록 설정
     df = conn.read(clear_cache=True)  # 캐시 비우고 새로 읽어오기
 
-    st.write(df)
-
     sub_TF = False
     
     # 데이터 가공
@@ -55,8 +53,6 @@ def get_data():
     return tabs_data
     
 
-tabs_data = get_data()
-
 ##########################################################
 ##########################################################
 
@@ -64,10 +60,9 @@ tabs_data = get_data()
 # 첫 번째 페이지: 전화번호 뒷자리 4자리를 입력 받는 페이지
 def first_page():
     st.markdown("# 전교 일등의 비밀")
-    st.markdown("## LLM-as-a-Judge를 이용한 수능 문제 출제 및 평가")
+    st.markdown("#### LLM-as-a-Judge를 이용한 수능 문제 출제 및 평가")
     st.title("  ")
-    st.title("  ")
-    st.title("전화번호 뒷자리 입력")
+    st.markdown("##### 전화번호 뒷자리 입력")
 
     phone_number = st.text_input("전화번호 뒷자리 4자리를 입력하세요:", max_chars=4)
 
@@ -99,9 +94,9 @@ def second_page():
         """,
         unsafe_allow_html=True
     )
-    
-    # st.caption(tabs_data)
 
+    tabs_data = get_data()
+    
     # 탭 세션 관리
     tabs = list(tabs_data.keys())
 
@@ -155,8 +150,6 @@ def second_page():
                 for q_idx, question in enumerate(tabs_data[tab_idx]["questions"])
                 if "sub_questions_problems" in question  # 문제 평가 질문이 있는 경우만 처리
             }
-
-
 
     
     # 평가 기준 설명
