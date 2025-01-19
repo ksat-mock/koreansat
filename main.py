@@ -362,9 +362,6 @@ def second_page():
                                 key=sub_key
                             )
 
-                        st.write(f"{st.session_state[problems_key][problems_q_key]}")
-                        st.write(st.session_state[problems_key][problems_q_key])
-
                         # 배경색 div 종료
                         st.markdown('</div>', unsafe_allow_html=True)
 
@@ -483,13 +480,12 @@ def second_page():
                 # 1️⃣ 지문 관련 문제 체크 (한 탭에 4개)
                 # for problems_q_key, sub_answers in st.session_state.get(passage_key, {}).items():
                 for problems_q_key, sub_answers in st.session_state[passage_key].items():
-                    st.write(st.session_state[passage_key][problems_q_key])
-                    st.write("DD")
                     for sub_idx, value in enumerate(sub_answers):
                         # 4개 항목 확인: 값이 None 또는 1, 2, 3, 4, 5가 아닌 값이 들어가면 안됨
                         if value not in [1, 2, 3, 4, 5]:
                             all_selected = False
-                            st.error(f"선택되지 않은 항목: {problems_q_key} - 지문 관련 문제 {sub_idx + 1}")  # 선택되지 않은 항목
+                            # st.error(f"선택되지 않은 항목: {problems_q_key} - 지문 관련 문제 {sub_idx + 1}")  # 선택되지 않은 항목
+                            st.error(f"[지문 평가]에 선택되지 않은 항목이 있습니다.")  # 선택되지 않은 항목
                             break
             
                 # 2️⃣ 문제 관련 문제 체크 (각 문제마다 4개)
@@ -500,7 +496,8 @@ def second_page():
                             # 각 문제마다 4개 항목 확인: 값이 None 또는 1, 2, 3, 4, 5가 아닌 값이 들어가면 안됨
                             if value not in [1, 2, 3, 4, 5]:
                                 all_selected = False
-                                st.error(f"선택되지 않은 항목: 문제 {idx+1} - 문제 관련 문제 {sub_idx + 1}")  # 선택되지 않은 항목
+                                # st.error(f"선택되지 않은 항목: 문제 {idx+1} - 문제 관련 문제 {sub_idx + 1}")  # 선택되지 않은 항목
+                                st.error(f"[문제 평가]에 선택되지 않은 항목이 있습니다.")  # 선택되지 않은 항목
                                 break
 
 
