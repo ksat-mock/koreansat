@@ -122,7 +122,6 @@ def second_page():
 
     # for tab_idx in range(1, tab_count + 1):
     for tab_idx in tabs:
-        st.write(tab_idx)
         tab_key = f"answers_tab{tab_idx}"
         if tab_key not in st.session_state:
             # 각 탭에 대해 문제의 개수에 맞는 사용자 답안을 저장할 리스트 초기화
@@ -149,6 +148,7 @@ def second_page():
         
         # 지문 평가 세션 초기화
         if passage_key not in st.session_state:
+            st.write(passage_key)
             st.session_state[passage_key] = {
                 f"passage_q{q_idx+1}": [None] * len(question["sub_questions_passage"])
                 for q_idx, question in enumerate(tabs_data[tab_idx]["questions"])
