@@ -65,11 +65,58 @@ def get_data():
     return tabs_data, sub_sub
 
 
-# 구글 시트에 세션 데이터 저장 함수
-def save_data_to_gsheet():
-    # GSheets 연결 객체 생성
-    conn = st.connection("gsheets", type=GSheetsConnection)
+# # 구글 시트에 세션 데이터 저장 함수
+# def save_data_to_gsheet():
+#     # GSheets 연결 객체 생성
+#     conn = st.connection("gsheets", type=GSheetsConnection)
 
+#     # 저장할 데이터 준비
+#     tab_idx = st.session_state.current_tab  # 현재 탭
+#     tab_key = f"answers_tab{tab_idx}"  # 사용자 답안 키
+#     passage_key = f"subquestions_passage_tab{tab_idx}"  # 지문 평가 키
+#     problems_key = f"subquestions_problems_tab{tab_idx}"  # 문제 평가 키
+
+#     # 사용자 답안과 평가 데이터 추출
+#     user_answers = st.session_state.get(tab_key, [])
+#     passage_eval = st.session_state.get(passage_key, {})
+#     problems_eval = st.session_state.get(problems_key, {})
+
+#     # 저장할 데이터프레임 생성
+#     data_to_save = {
+#         "탭": [tab_idx] * len(user_answers),
+#         "질문 번호": [i + 1 for i in range(len(user_answers))],
+#         "사용자 답안": user_answers,
+#         "지문 평가": [passage_eval.get(f"passage_q{i+1}", []) for i in range(len(user_answers))],
+#         "문제 평가": [problems_eval.get(f"problems_q{i+1}", []) for i in range(len(user_answers))],
+#     }
+#     df_to_save = pd.DataFrame(data_to_save)
+
+#     # A33 이후부터 데이터 추가
+#     existing_data = conn.read()
+#     next_row = len(existing_data) + 1  # 기존 데이터 길이를 기준으로 다음 행 계산
+#     conn.write(df_to_save, start_cell=f"A{next_row}")
+
+
+
+# 구글 시트 인증 설정
+def authenticate_google_sheets():
+    credentials_info = st.secrets["connections.gsheets"]  # .streamlit/secrets.toml에서 인증 정보 읽어오기
+    credentials = Credentials.from_service_account_info(
+        credentials_info,
+        scopes=["https://www.googleapis.com/auth/spreadsheets"]
+    )
+    client = gspread.authorize(credentials)
+    return client
+
+
+# 구글 시트에 데이터 추가 함수
+def save_data_to_gsheet():
+    # 구글 시트 인증
+    client = authenticate_google_sheets()
+    
+    # 구글 시트 열기 (시트 이름과 워크시트 이름)
+    sheet = client.open_by_url(st.secrets["connections.gsheets"]["spreadsheet"]).sheet1  # URL을 통해 시트 열기
+    
     # 저장할 데이터 준비
     tab_idx = st.session_state.current_tab  # 현재 탭
     tab_key = f"answers_tab{tab_idx}"  # 사용자 답안 키
@@ -90,12 +137,14 @@ def save_data_to_gsheet():
         "문제 평가": [problems_eval.get(f"problems_q{i+1}", []) for i in range(len(user_answers))],
     }
     df_to_save = pd.DataFrame(data_to_save)
-
-    # A33 이후부터 데이터 추가
-    existing_data = conn.read()
-    next_row = len(existing_data) + 1  # 기존 데이터 길이를 기준으로 다음 행 계산
-    conn.write(df_to_save, start_cell=f"A{next_row}")
     
+    # DataFrame을 2D list로 변환하여 시트에 추가
+    data_to_save_list = df_to_save.values.tolist()
+    
+    # 구글 시트에 데이터를 추가 (A2부터 시작)
+    for row in data_to_save_list:
+        sheet.append_row(row)
+        
 
 ##########################################################
 ##########################################################
