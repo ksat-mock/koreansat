@@ -237,7 +237,7 @@ def second_page():
                 # 문제 답변 선택
                 main_key = f"main_question_{st.session_state.current_tab}_{idx}"
                 selected_main = st.radio(
-                    f"{ }",
+                    label=" ",
                     options = q["choices"],
                     index=None,
                     key=main_key
