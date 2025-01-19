@@ -389,14 +389,14 @@ def second_page():
 
                         # 고유한 key 생성 및 라디오 버튼으로 점수 선택
                         for problems_q_key, sub_answers in st.session_state[problems_key].items():
-                            for sub_idx, _ in enumerate(sub_answers):
-                                sub_key = f"sub_question_{problems_q_key}_sub{sub_idx+1}"
-                                st.session_state[problems_key][problems_q_key][sub_idx] = st.radio(
-                                    f"문제 평가 {problems_q_key} - {sub_idx + 1}의 답을 선택하세요:",
-                                    options=[1, 2, 3, 4, 5],  # 1부터 5까지 선택 가능
-                                    index=2,  # 기본값 (3으로 설정)
-                                    key=sub_key
-                                )
+                            # for sub_idx, _ in enumerate(sub_answers):
+                            sub_key = f"sub_question_{problems_q_key}_sub{sub_idx+1}"
+                            st.session_state[problems_key][problems_q_key][sub_idx] = st.radio(
+                                f"문제 평가 {problems_q_key} - {sub_idx + 1}의 답을 선택하세요:",
+                                options=[1, 2, 3, 4, 5],  # 1부터 5까지 선택 가능
+                                index=2,  # 기본값 (3으로 설정)
+                                key=sub_key
+                            )
 
 
                         
