@@ -32,7 +32,7 @@ def get_data():
 
         # 하위 문제 (지문 평가, 문제 평가) 받아오기
         if sub_TF <= 1 and row.지문평가1:
-            if sub_TF == 0
+            if sub_TF == 0:
                 sub_questions_passage = [row.지문평가1, row.지문평가2, row.지문평가3, row.지문평가4]
                 sub_questions_problems = [row.문제평가1, row.문제평가2, row.문제평가3, row.지문평가4]
             sub_TF += 1
