@@ -33,8 +33,8 @@ def get_data():
         # 하위 문제 (지문 평가, 문제 평가) 받아오기
         if sub_TF <= 1 and row.지문평가1:
             if sub_TF == 0:
-                sub_questions_passage = [row.지문평가1, row.지문평가2, row.지문평가3, row.지문평가4]
-                sub_questions_problems = [row.문제평가1, row.문제평가2, row.문제평가3, row.문제평가4]
+                sub_sub["sub_questions_passage"] = [row.지문평가1, row.지문평가2, row.지문평가3, row.지문평가4]
+                sub_sub["sub_questions_problems"] = [row.문제평가1, row.문제평가2, row.문제평가3, row.문제평가4]
             sub_TF += 1
 
         # 하위 문제 부연설명 받아오기
@@ -48,8 +48,8 @@ def get_data():
         tabs_data[tab_name]["questions"].append({
             "question": row.질문,
             "choices": choices,
-            "sub_questions_passage": sub_questions_passage,  # 하위 질문 추가 - 지문
-            "sub_questions_problems": sub_questions_problems  # 하위 질문 추가 - 문제
+            "sub_questions_passage": sub_sub["sub_questions_passage"],  # 하위 질문 추가 - 지문
+            "sub_questions_problems": sub_sub["sub_questions_problems"]  # 하위 질문 추가 - 문제
         })
 
     
@@ -145,11 +145,9 @@ def second_page():
         # 하위 문제 답안 세션 초기화
         passage_key = f"subquestions_passage_tab{tab_idx}"
         problems_key = f"subquestions_problems_tab{tab_idx}"
-        st.write(passage_key)
         
         # 지문 평가 세션 초기화
         if passage_key not in st.session_state:
-            st.write(passage_key)
             st.session_state[passage_key] = {
                 f"passage_q{q_idx+1}": [None] * len(question["sub_questions_passage"])
                 for q_idx, question in enumerate(tabs_data[tab_idx]["questions"])
@@ -289,23 +287,44 @@ def second_page():
                             st.markdown(f"<h6>지문 평가 {idx + 1}-{sub_idx + 1}</h6>", unsafe_allow_html=True)
                             st.markdown(f"<h6>{sub_q}</h6>", unsafe_allow_html=True)
                 
+                            # # 고유한 key 생성 및 라디오 버튼으로 점수 선택
+                            # for problems_q_key, sub_answers in st.session_state[passage_key].items():
+                            #     sub_key = f"sub_question_{idx + 1}_{problems_q_key}_sub{sub_idx+1}"
+                
+                            #     # NaN 또는 None 확인 및 처리
+                            #     sub_passage_value = sub_sub["sub_sub_questions_passage"][sub_idx]
+                            #     if sub_passage_value is not None and not (isinstance(sub_passage_value, float) and math.isnan(sub_passage_value)):
+                            #         sub_question = f"({sub_passage_value})"
+                            #     else:
+                            #         sub_question = " "  # 빈 문자열로 대체
+                
+                            #     st.session_state[passage_key][problems_q_key][sub_idx] = st.radio(
+                            #         sub_question,
+                            #         options=[1, 2, 3, 4, 5],  # 1부터 5까지 선택 가능
+                            #         index=None,  # 기본값 없음
+                            #         key=sub_key
+                            #     )
+
                             # 고유한 key 생성 및 라디오 버튼으로 점수 선택
                             for problems_q_key, sub_answers in st.session_state[passage_key].items():
-                                sub_key = f"sub_question_{idx + 1}_{problems_q_key}_sub{sub_idx+1}"
-                
-                                # NaN 또는 None 확인 및 처리
-                                sub_passage_value = sub_sub["sub_sub_questions_passage"][sub_idx]
-                                if sub_passage_value is not None and not (isinstance(sub_passage_value, float) and math.isnan(sub_passage_value)):
-                                    sub_question = f"({sub_passage_value})"
-                                else:
-                                    sub_question = " "  # 빈 문자열로 대체
-                
-                                st.session_state[passage_key][problems_q_key][sub_idx] = st.radio(
-                                    sub_question,
-                                    options=[1, 2, 3, 4, 5],  # 1부터 5까지 선택 가능
-                                    index=None,  # 기본값 없음
-                                    key=sub_key
-                                )
+                                for sub_idx in range(len(sub_answers)):  # 하위 질문 인덱스별로 반복
+                                    # NaN 또는 None 확인 및 처리
+                                    sub_passage_value = sub_answers[sub_idx]
+                                    if sub_passage_value is not None and not (isinstance(sub_passage_value, float) and math.isnan(sub_passage_value)):
+                                        sub_question = f"({sub_passage_value})"
+                                    else:
+                                        sub_question = " "  # 기본값으로 빈 문자열 사용
+                                    
+                                    # 라디오 버튼 생성 및 선택된 값 저장
+                                    selected_value = st.radio(
+                                        sub_question, 
+                                        options=[1, 2, 3, 4, 5],  # 선택 가능한 값
+                                        index=None,  # 초기값 없음
+                                    )
+                                    
+                                    # 선택된 값을 세션에 저장
+                                    st.session_state[passage_key][problems_q_key][sub_idx] = selected_value
+
 
                             # 배경색 div 종료
                             st.markdown('</div>', unsafe_allow_html=True)
