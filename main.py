@@ -367,6 +367,8 @@ def second_page():
                         st.markdown('</div>', unsafe_allow_html=True)
 
 
+    st.write(st.session_state)  # 전체 세션 상태 확인
+
 
 
     with st.container():
@@ -502,7 +504,6 @@ def second_page():
                                 all_selected = False
                                 st.error(f"선택되지 않은 항목: 문제 {idx+1} - 문제 관련 문제 {sub_idx + 1}")  # 선택되지 않은 항목
                                 break
-                st.write(st.session_state)  # 전체 세션 상태 확인
 
                 st.write(st.session_state.get(passage_key, {}))
                 st.write(st.session_state.get(f"subquestions_problems_tab{tab_idx}", {}))
@@ -526,6 +527,8 @@ def second_page():
     
 
     st.write("   ")
+
+    st.write(st.session_state)  # 전체 세션 상태 확인
 
     # 피드백 제출 처리 함수
     def submit_feedback():
