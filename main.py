@@ -233,7 +233,8 @@ def second_page():
     
         for idx, q in enumerate(questions):
             with cols[1]:
-                st.subheader(f"문제 {idx + 1}")
+                # st.subheader(f"문제 {idx + 1}")
+                st.markdown(f"<h5>문제 {idx + 1}</h6>", unsafe_allow_html=True)
                 st.write(q["question"])
     
                 # 문제 답변 선택
@@ -261,9 +262,11 @@ def second_page():
                 if col_position < sub_col_end:  # 컬럼 범위를 초과하지 않도록 제한
                     with cols[col_position]:
                         # st.subheader(f"{idx + 1}-{sub_idx + 1}")
+                        st.markdown(f"<h6>문제 {idx + 1}</h6>", unsafe_allow_html=True)
                         st.markdown(f"<p style='font-size:14px; font-weight:bold;'>문제 평가 {idx + 1}-{sub_idx + 1}</p>", unsafe_allow_html=True)
                         # st.write(sub_q["question"])
                         st.write(sub_q)
+                        st.markdown("#### {sub_q}")
 
                         # 고유한 key 생성 및 라디오 버튼으로 점수 선택
                         for problems_q_key, sub_answers in st.session_state[problems_key].items():
