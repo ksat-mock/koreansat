@@ -101,12 +101,6 @@ def second_page():
             flex: 0 0 auto;
             margin-right: 10px;
         }
-        .separator {
-            border-left: 2px solid #000;
-            height: 100%;
-            margin-left: 10px;
-            margin-right: 10px;
-        }
         </style>
         """,
         unsafe_allow_html=True
@@ -268,9 +262,23 @@ def second_page():
             
                 if col_position < sub_col_end:  # 컬럼 범위를 초과하지 않도록 제한
                     with cols[col_position]:
-                        if col_position == 2:
-                            # st.markdown('<div style="border-left: 2px solid #000; height: 100%;"></div>', unsafe_allow_html=True)
-                            st.markdown('<div class="separator"></div>', unsafe_allow_html=True)
+                        
+                        # 배경색을 추가하기 위한 스타일 적용
+                        st.markdown("""
+                            <style>
+                                .sub-question-container {
+                                    background-color: #f0f0f0;  /* 배경색 설정 */
+                                    padding: 10px;              /* 내부 여백 */
+                                    border-radius: 5px;         /* 둥근 모서리 */
+                                    margin-bottom: 10px;        /* 하단 여백 */
+                                }
+                            </style>
+                        """, unsafe_allow_html=True)
+            
+                        # 하위 문제 영역을 div로 감싸서 배경색 적용
+                        st.markdown('<div class="sub-question-container">', unsafe_allow_html=True)
+            
+                        
                         # st.subheader(f"{idx + 1}-{sub_idx + 1}")
                         st.markdown(f"<h6>문제 평가 {idx + 1}-{sub_idx + 1}</h6>", unsafe_allow_html=True)
                         # st.markdown(f"<p style='font-size:14px; font-weight:bold;'>문제 평가 {idx + 1}-{sub_idx + 1}</p>", unsafe_allow_html=True)
