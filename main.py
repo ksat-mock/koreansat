@@ -369,10 +369,6 @@ def second_page():
                         st.markdown('</div>', unsafe_allow_html=True)
 
 
-    st.write(st.session_state)  # 전체 세션 상태 확인
-
-
-
     with st.container():
         cols = st.columns([5, 4])
 
@@ -507,14 +503,6 @@ def second_page():
                                 st.error(f"선택되지 않은 항목: 문제 {idx+1} - 문제 관련 문제 {sub_idx + 1}")  # 선택되지 않은 항목
                                 break
 
-                st.write(st.session_state.get(passage_key, {}))
-                st.write(st.session_state.get(f"subquestions_problems_tab{tab_idx}", {}))
-                st.write(" ")
-                st.write(st.session_state[passage_key]["passage_q1"])
-                st.write(st.session_state[problems_key]["problems_q1"])
-                st.write("DDDDD")
-                st.write(f"{st.session_state[problems_key][problems_q_key]}")
-                st.write(st.session_state[problems_key][problems_q_key])
 
             
                 # 평가 완료 여부에 대한 메시지 출력
@@ -523,8 +511,6 @@ def second_page():
                     st.success("지문 및 문제 평가를 완료하였습니다!")
                 else:
                     st.error("모든 문제에 대해 평가를 선택해주세요.")
-
-
 
     
 
