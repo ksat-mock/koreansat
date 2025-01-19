@@ -214,7 +214,8 @@ def second_page():
     
     with st.container():
         # 컬럼 비율: 지문(1.5) + 문제(1) + 하위 문제들(1씩)
-        cols = st.columns([1.5, 1, 1, 1, 1, 1])
+        # cols = st.columns([1.5, 1, 1, 1, 1, 1])
+        cols = st.columns([3, 2, 1, 1, 1, 1])
     
         # 1️⃣ 지문 (첫 번째 컬럼)
         with cols[0]:
