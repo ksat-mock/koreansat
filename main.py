@@ -485,9 +485,6 @@ def second_page():
                 for problems_q_key, sub_answers in st.session_state[passage_key].items():
                     st.write(st.session_state[passage_key][problems_q_key])
                     st.write("DD")
-                    st.write("DDDDD")
-                    st.write(f"{st.session_state[problems_key][problems_q_key]}")
-                    st.write(st.session_state[problems_key][problems_q_key])
                     for sub_idx, value in enumerate(sub_answers):
                         # 4개 항목 확인: 값이 None 또는 1, 2, 3, 4, 5가 아닌 값이 들어가면 안됨
                         if value not in [1, 2, 3, 4, 5]:
@@ -511,6 +508,9 @@ def second_page():
                 st.write(" ")
                 st.write(st.session_state[passage_key]["passage_q1"])
                 st.write(st.session_state[problems_key]["problems_q1"])
+                st.write("DDDDD")
+                st.write(f"{st.session_state[problems_key][problems_q_key]}")
+                st.write(st.session_state[problems_key][problems_q_key])
             
                 # 평가 완료 여부에 대한 메시지 출력
                 if all_selected:
