@@ -61,6 +61,10 @@ def get_data():
 
 # 첫 번째 페이지: 전화번호 뒷자리 4자리를 입력 받는 페이지
 def first_page():
+    st.title("전교 일등의 비밀")
+    st.subtitle("LLM-as-a-Judge를 이용한 수능 문제 출제 및 평가")
+    st.title("  ")
+    st.title("  ")
     st.title("전화번호 뒷자리 입력")
 
     phone_number = st.text_input("전화번호 뒷자리 4자리를 입력하세요:", max_chars=4)
@@ -94,8 +98,9 @@ def second_page():
         unsafe_allow_html=True
     )
 
-    tabs_data = tabs_data = get_data()
-    st.caption(tabs_data)
+    tabs_data = get_data()
+    
+    # st.caption(tabs_data)
 
     # 탭 세션 관리
     tabs = list(tabs_data.keys())
@@ -262,7 +267,7 @@ def second_page():
                             st.session_state[problems_key][problems_q_key][sub_idx] = st.radio(
                                 f"문제 평가 {problems_q_key} - {sub_idx + 1}의 답을 선택하세요:",
                                 options=[1, 2, 3, 4, 5],  # 1부터 5까지 선택 가능
-                                # index=2,  # 기본값 (3으로 설정)
+                                index=None,  # 기본값 없음
                                 key=sub_key
                             )
 
