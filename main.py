@@ -341,6 +341,8 @@ def second_page():
                                     index=None,  # 기본값 없음
                                     key=sub_key
                                 )
+                                
+                                break
 
 
 
@@ -396,6 +398,8 @@ def second_page():
                                 index=None,  # 기본값 없음
                                 key=sub_key
                             )
+
+                            break
 
                         # 배경색 div 종료
                         st.markdown('</div>', unsafe_allow_html=True)
