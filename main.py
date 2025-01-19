@@ -145,6 +145,7 @@ def second_page():
         # 하위 문제 답안 세션 초기화
         passage_key = f"subquestions_passage_tab{tab_idx}"
         problems_key = f"subquestions_problems_tab{tab_idx}"
+        st.write(passage_key)
         
         # 지문 평가 세션 초기화
         if passage_key not in st.session_state:
