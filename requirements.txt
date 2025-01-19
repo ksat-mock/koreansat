@@ -1,5 +1,6 @@
 streamlit
 gspread
 google-auth
+pandas
 st-gsheets-connection
 git+https://github.com/streamlit/gsheets-connection
