@@ -367,7 +367,7 @@ def second_page():
 
 
     with st.container():
-        cols = st.columns([3, 2, 1, 1, 1, 1])
+        cols = st.columns([5, 4])
 
         with cols[0]:
             # 제출 버튼
@@ -426,20 +426,18 @@ def second_page():
                         st.info(f"문제 {idx + 1}: 맞았습니다.")
 
 
-        with cols[2]:
+        with cols[1]:
             # '평가 제출하기' 버튼 추가
             if st.button("평가 제출하기"):
                 # 지문 및 문제 관련 평가 값들이 이미 세션에 저장되어 있으므로
                 # 추가적인 작업 없이 완료 메시지 출력
-                st.success("지문 및 문제 평가를 완료하였습니다!")
-            
-                # '평가 제출하기' 버튼과 '답안 제출하기' 버튼을 동일한 높이에 위치하게 설정
-                # 버튼 아래로 메시지가 띄워짐
                 st.session_state[f"evaluation_submitted_tab{st.session_state.current_tab}"] = True
             
             # 평가 제출 여부를 체크하여 메시지 표시
             if st.session_state.get(f"evaluation_submitted_tab{st.session_state.current_tab}", False):
+                # 이미 제출한 경우에만 메시지 출력
                 st.success("지문 및 문제 평가를 완료하였습니다!")
+
 
             
     st.write("   ")
