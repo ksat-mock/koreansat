@@ -429,17 +429,22 @@ def second_page():
         with cols[1]:
             # '평가 제출하기' 버튼 추가
             if st.button("평가 제출하기"):
-                # 지문 및 문제 관련 평가 값들이 이미 세션에 저장되어 있으므로
-                # 추가적인 작업 없이 완료 메시지 출력
-                st.session_state[f"evaluation_submitted_tab{st.session_state.current_tab}"] = True
+                # 모든 라디오 버튼이 선택되었는지 확인
+                all_selected = True
             
-            # 평가 제출 여부를 체크하여 메시지 표시
-            if st.session_state.get(f"evaluation_submitted_tab{st.session_state.current_tab}", False):
-                # 이미 제출한 경우에만 메시지 출력
-                st.success("지문 및 문제 평가를 완료하였습니다!")
-
-
+                # 각 문제 및 지문 관련 라디오 버튼 값이 모두 선택되었는지 확인하는 로직
+                for idx, sub_idx in enumerate(range(len(questions))):  # questions 리스트를 순회 (여기서는 예시로 리스트 사용)
+                    # 각 라디오 버튼 값이 저장된 키에 대해 확인
+                    if st.session_state.get(f"passage_{idx}_question_{sub_idx}") is None:
+                        all_selected = False
+                        break  # 하나라도 선택되지 않았다면 실패
             
+                if all_selected:
+                    st.session_state[f"evaluation_submitted_tab{st.session_state.current_tab}"] = True
+                    st.success("지문 및 문제 평가를 완료하였습니다!")
+                else:
+                    st.error("모든 문제에 대해 평가를 선택해주세요.")
+
     st.write("   ")
 
     # 피드백 제출 처리 함수
