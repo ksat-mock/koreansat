@@ -238,7 +238,7 @@ def second_page():
                 main_key = f"main_question_{st.session_state.current_tab}_{idx}"
                 selected_main = st.radio(
                     # f"문제 {idx + 1}의 답을 선택하세요:",
-                    q["choices"],
+                    options = q["choices"],
                     index=None,
                     key=main_key
                 )
