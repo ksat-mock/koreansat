@@ -89,27 +89,9 @@ def first_page():
 # 두 번째 페이지: 문제 풀이 페이지
 def second_page():
     st.set_page_config(layout="wide")
-    # st.markdown(
-    #     """
-    #     <style>
-    #     .horizontal-scroll {
-    #         display: flex;
-    #         overflow-x: auto;
-    #         white-space: nowrap;
-    #     }
-    #     .horizontal-scroll > div {
-    #         flex: 0 0 auto;
-    #         margin-right: 10px;
-    #     }
-    #     </style>
-    #     """,
-    #     unsafe_allow_html=True
-    # )
-
     st.markdown(
         """
         <style>
-        /* 기존: 가로 스크롤을 지원하는 스타일 */
         .horizontal-scroll {
             display: flex;
             overflow-x: auto;
@@ -119,20 +101,9 @@ def second_page():
             flex: 0 0 auto;
             margin-right: 10px;
         }
-
-        /* 새롭게 추가: 동일 높이 행 스타일 */
-        .cell-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 150px; /* 최소 높이 설정 */
-            border: 1px solid lightgray; /* 셀 경계선 (선택 사항) */
-            padding: 5px; /* 셀 안쪽 여백 */
-        }
         </style>
         """,
-        unsafe_allow_html=True,
+        unsafe_allow_html=True
     )
 
     tabs_data, sub_sub = get_data()
@@ -248,10 +219,7 @@ def second_page():
         # 1️⃣ 지문 (첫 번째 컬럼)
         with cols[0]:
             st.header("지문")
-            # st.write(passage)
-            st.markdown(
-                f"<div class='cell-container'>{passage}</div>", unsafe_allow_html=True
-            )
+            st.write(passage)
     
         # 2️⃣ 문제 (두 번째 컬럼)
         questions = tabs_data[st.session_state.current_tab]["questions"]
@@ -265,13 +233,8 @@ def second_page():
     
         for idx, q in enumerate(questions):
             with cols[1]:
-                # st.subheader(f"문제 {idx + 1}")
-                # st.write(q["question"])
-
-                st.markdown(
-                    f"<div class='cell-container'><strong>문제 {idx + 1}</strong><br>{q['question']}</div>",
-                    unsafe_allow_html=True,
-                )
+                st.subheader(f"문제 {idx + 1}")
+                st.write(q["question"])
     
                 # 문제 답변 선택
                 main_key = f"main_question_{st.session_state.current_tab}_{idx}"
@@ -298,11 +261,7 @@ def second_page():
                 if col_position < sub_col_end:  # 컬럼 범위를 초과하지 않도록 제한
                     with cols[col_position]:
                         # st.subheader(f"{idx + 1}-{sub_idx + 1}")
-                        # st.markdown(f"<p style='font-size:14px; font-weight:bold;'>문제 평가 {idx + 1}-{sub_idx + 1}</p>", unsafe_allow_html=True)
-                        st.markdown(
-                            f"<div class='cell-container'><strong>문제 평가 {idx + 1}-{sub_idx + 1}</strong><br>{sub_q}</div>",
-                            unsafe_allow_html=True,
-                        )
+                        st.markdown(f"<p style='font-size:14px; font-weight:bold;'>문제 평가 {idx + 1}-{sub_idx + 1}</p>", unsafe_allow_html=True)
                         # st.write(sub_q["question"])
                         st.write(sub_q)
 
