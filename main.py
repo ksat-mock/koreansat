@@ -34,13 +34,13 @@ def get_data():
         if sub_TF <= 1 and row.지문평가1:
             if sub_TF == 0:
                 sub_questions_passage = [row.지문평가1, row.지문평가2, row.지문평가3, row.지문평가4]
-                sub_questions_problems = [row.문제평가1, row.문제평가2, row.문제평가3, row.지문평가4]
+                sub_questions_problems = [row.문제평가1, row.문제평가2, row.문제평가3, row.문제평가4]
             sub_TF += 1
 
         # 하위 문제 부연설명 받아오기
         if sub_sub_TF == 0 and sub_TF == 2 and row.지문평가1:
             sub_sub["sub_sub_questions_passage"] = [row.지문평가1, row.지문평가2, row.지문평가3, row.지문평가4]
-            sub_sub["sub_sub_questions_problems"] = [row.문제평가1, row.문제평가2, row.문제평가3, row.지문평가4]
+            sub_sub["sub_sub_questions_problems"] = [row.문제평가1, row.문제평가2, row.문제평가3, row.문제평가4]
             sub_sub_TF += 1
         
     
