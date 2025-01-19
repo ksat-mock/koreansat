@@ -472,6 +472,8 @@ def second_page():
             
                 # 현재 탭에 대한 지문 관련 문제와 문제 관련 문제 체크
                 tab_idx = st.session_state.current_tab  # 현재 탭 가져오기
+                st.write(tab_idx)
+                st.write("dddD")
                 passage_key = f"subquestions_passage_tab{tab_idx}"
                 problems_key = f"subquestions_problems_tab{tab_idx}"
             
