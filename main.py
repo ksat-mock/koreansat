@@ -37,15 +37,10 @@ def get_data():
     
     # 매번 최신 데이터를 읽어오도록 설정
     df = conn.read(clear_cache=True)  # 캐시 비우고 새로 읽어오기
-    
-    # Print results.
-    # for row in df.itertuples():
-    #     st.write(f"{row.탭} has a :{row.지문}:")
 
     st.write(df)
 
-
-    # sub_questions_TF = True
+    sub_TF = False
     
     # 데이터 가공
     tabs_data = {}
@@ -68,9 +63,10 @@ def get_data():
         # st.write(sub_questions_passage, sub_questions_problems)
 
         # 하위 문제 (지문 평가, 문제 평가) 받아오기
-        if row.지문평가1:
+        if not sub_TF and row.지문평가1:
             sub_questions_passage = [row.지문평가1, row.지문평가2, row.지문평가3, row.지문평가4]
             sub_questions_problems = [row.문제평가1, row.문제평가2, row.문제평가3, row.지문평가4]
+            sub_TF = True
         
         # sub_questions_passage, sub_questions_problems = sub_questions(row)
         # st.write(sub_questions_passage, sub_questions_problems)
@@ -390,6 +386,18 @@ def second_page():
                                 step=1,  # 1단위로 증가
                                 key=sub_key
                             )
+
+                        # 고유한 key 생성 및 라디오 버튼으로 점수 선택
+                        for problems_q_key, sub_answers in st.session_state[problems_key].items():
+                            for sub_idx, _ in enumerate(sub_answers):
+                                sub_key = f"sub_question_{problems_q_key}_sub{sub_idx+1}"
+                                st.session_state[problems_key][problems_q_key][sub_idx] = st.radio(
+                                    f"문제 평가 {problems_q_key} - {sub_idx + 1}의 답을 선택하세요:",
+                                    options=[1, 2, 3, 4, 5],  # 1부터 5까지 선택 가능
+                                    index=2,  # 기본값 (3으로 설정)
+                                    key=sub_key
+                                )
+
 
                         
                         # # 문제 평가 답안 저장
