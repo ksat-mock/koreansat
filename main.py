@@ -476,7 +476,8 @@ def second_page():
                 problems_key = f"subquestions_problems_tab{tab_idx}"
             
                 # 1️⃣ 지문 관련 문제 체크 (한 탭에 4개)
-                for problems_q_key, sub_answers in st.session_state.get(passage_key, {}).items():
+                # for problems_q_key, sub_answers in st.session_state.get(passage_key, {}).items():
+                for problems_q_key, sub_answers in st.session_state[passage_key].items():
                     st.write(st.session_state[passage_key][problems_q_key])
                     st.write("DD")
                     for sub_idx, value in enumerate(sub_answers):
