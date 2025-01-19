@@ -262,6 +262,8 @@ def second_page():
             
                 if col_position < sub_col_end:  # 컬럼 범위를 초과하지 않도록 제한
                     with cols[col_position]:
+                        if col_position == 2:
+                            st.markdown('<div style="border-left: 2px solid #000; height: 100%;"></div>', unsafe_allow_html=True)
                         # st.subheader(f"{idx + 1}-{sub_idx + 1}")
                         st.markdown(f"<h6>문제 평가 {idx + 1}-{sub_idx + 1}</h6>", unsafe_allow_html=True)
                         # st.markdown(f"<p style='font-size:14px; font-weight:bold;'>문제 평가 {idx + 1}-{sub_idx + 1}</p>", unsafe_allow_html=True)
@@ -305,7 +307,7 @@ def second_page():
                         #             key=sub_answer_key
                         #         )
     
-            break
+            # break
 
 
     # 제출 버튼
