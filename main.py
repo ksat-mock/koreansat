@@ -305,6 +305,8 @@ def second_page():
                                     key=sub_key
                                 )
 
+                            st.write(st.session_state[passage_key][problems_q_key])
+                            
                             # 배경색 div 종료
                             st.markdown('</div>', unsafe_allow_html=True)
 
