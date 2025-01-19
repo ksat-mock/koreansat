@@ -94,7 +94,7 @@ def save_data_to_gsheet():
     # A33 이후부터 데이터 추가
     existing_data = conn.read()
     next_row = len(existing_data) + 1  # 기존 데이터 길이를 기준으로 다음 행 계산
-    conn.update(df_to_save, start_cell=f"A{next_row}")
+    conn.update(df_to_save, range=f"A{next_row}")
 
 
 
