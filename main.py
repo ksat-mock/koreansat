@@ -233,7 +233,7 @@ def second_page():
         #     st.session_state[tab_key] = {}
 
         with cols[1]:
-            st.markdown(f"<h5>문제 {idx + 1}</h6>", unsafe_allow_html=True)
+            st.markdown(f"<h5>문제</h6>", unsafe_allow_html=True)
             
         for idx, q in enumerate(questions):
             with cols[1]:
