@@ -320,7 +320,7 @@ def second_page():
                                         sub_question, 
                                         options=[1, 2, 3, 4, 5],  # 선택 가능한 값
                                         index=None,  # 초기값 없음
-                                        key=f"{problems_q_key}_{sub_idx}"  # 고유한 key 생성
+                                        key=f"{problems_q_key}_{sub_idx}_test"  # 고유한 key 생성
                                     )
                                     
                                     # 선택된 값을 세션에 저장
