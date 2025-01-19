@@ -15,6 +15,7 @@ def get_data():
     df = conn.read(clear_cache=True)  # 캐시 비우고 새로 읽어오기
 
     sub_TF = False
+    sub_sub_TF = False
     
     # 데이터 가공
     tabs_data = {}
@@ -32,6 +33,12 @@ def get_data():
             sub_questions_passage = [row.지문평가1, row.지문평가2, row.지문평가3, row.지문평가4]
             sub_questions_problems = [row.문제평가1, row.문제평가2, row.문제평가3, row.지문평가4]
             sub_TF = True
+
+        # 하위 문제 부연설명 받아오기
+        if not sub_sub_TF and sub_TF and row.지문평가1:
+            sub_sub_questions_passage = [row.지문평가1, row.지문평가2, row.지문평가3, row.지문평가4]
+            sub_sub_questions_problems = [row.문제평가1, row.문제평가2, row.문제평가3, row.지문평가4]
+            sub_sub_TF = True
         
     
         # 질문 추가
@@ -39,7 +46,9 @@ def get_data():
             "question": row.질문,
             "choices": choices,
             "sub_questions_passage": sub_questions_passage,  # 하위 질문 추가 - 지문
-            "sub_questions_problems": sub_questions_problems  # 하위 질문 추가 - 문제
+            "sub_questions_problems": sub_questions_problems,  # 하위 질문 추가 - 문제
+            "sub_sub_questions_passage": sub_sub_questions_passage,
+            "sub_sub_questions_problems": sub_sub_questions_problems
         })
     
         # 정답 추가 (정답이 문자열일 경우 정수로 변환)
@@ -228,7 +237,7 @@ def second_page():
                 # 문제 답변 선택
                 main_key = f"main_question_{st.session_state.current_tab}_{idx}"
                 selected_main = st.radio(
-                    f"문제 {idx + 1}의 답을 선택하세요:",
+                    # f"문제 {idx + 1}의 답을 선택하세요:",
                     q["choices"],
                     index=None,
                     key=main_key
@@ -258,7 +267,8 @@ def second_page():
                             # for sub_idx, _ in enumerate(sub_answers):
                             sub_key = f"sub_question_{idx + 1}_{problems_q_key}_sub{sub_idx+1}"
                             st.session_state[problems_key][problems_q_key][sub_idx] = st.radio(
-                                f"문제 평가 {problems_q_key} - {sub_idx + 1}의 답을 선택하세요:",
+                                # f"문제 평가 {problems_q_key} - {sub_idx + 1}의 답을 선택하세요:",
+                                f"{tabs_data[tab_name]["questions"]["sub_sub_questions_problems][sub_idx]"}",
                                 options=[1, 2, 3, 4, 5],  # 1부터 5까지 선택 가능
                                 index=None,  # 기본값 없음
                                 key=sub_key
