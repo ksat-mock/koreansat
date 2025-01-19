@@ -359,7 +359,10 @@ def second_page():
                                 index=None,  # 기본값 없음
                                 key=sub_key
                             )
-            
+
+                        st.write(f"{st.session_state[problems_key][problems_q_key]}")
+                        st.write(st.session_state[problems_key][problems_q_key])
+
                         # 배경색 div 종료
                         st.markdown('</div>', unsafe_allow_html=True)
 
@@ -482,6 +485,9 @@ def second_page():
                 for problems_q_key, sub_answers in st.session_state[passage_key].items():
                     st.write(st.session_state[passage_key][problems_q_key])
                     st.write("DD")
+                    st.write("DDDDD")
+                    st.write(f"{st.session_state[problems_key][problems_q_key]}")
+                    st.write(st.session_state[problems_key][problems_q_key])
                     for sub_idx, value in enumerate(sub_answers):
                         # 4개 항목 확인: 값이 None 또는 1, 2, 3, 4, 5가 아닌 값이 들어가면 안됨
                         if value not in [1, 2, 3, 4, 5]:
