@@ -254,6 +254,7 @@ def second_page():
 
 
             # 3️⃣ 하위 문제 - 지문 관련
+            sub_questions_passage = q.get("sub_questions_passage", [])
             sub_col_start = 2  # 하위 질문이 시작하는 컬럼 인덱스
             sub_col_end = len(cols)  # 컬럼의 끝 인덱스
             
