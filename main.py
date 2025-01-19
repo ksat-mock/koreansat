@@ -7,30 +7,6 @@ from streamlit_gsheets import GSheetsConnection
 import math
 
 
-# def sub_questions(row):
-#     # row는 df의 각 행을 나타냅니다.
-#     sub_questions_passage = [
-#         row['지문평가1'],
-#         row['지문평가2'],
-#         row['지문평가3'],
-#         row['지문평가4']
-#     ]
-    
-#     sub_questions_problems = [
-#         row['문제평가1'],
-#         row['문제평가2'],
-#         row['문제평가3']
-#     ]
-    
-#     # None 값 제거
-#     sub_questions_passage = [item for item in sub_questions_passage if item is not None]
-#     sub_questions_problems = [item for item in sub_questions_problems if item is not None]
-    
-#     return sub_questions_passage, sub_questions_problems
-
-
-
-
 def get_data():
     # Create a connection object.
     conn = st.connection("gsheets", type=GSheetsConnection)
@@ -51,16 +27,7 @@ def get_data():
             tabs_data[tab_name] = {"passage": row.지문, "questions": [], "correct_answers": []}
     
         # 선지 리스트로 변환
-        # choices = [row.f'선지{i}' for i in range(1, 6)]
         choices = [getattr(row, f'선지{i}') for i in range(1, 6)]
-
-
-        # # 하위 문제 (지문 평가, 문제 평가) 받아오기
-        # if sub_questions_TF:
-        #     sub_questions_passage, sub_questions_problems = sub_questions(row)
-        #     sub_questions_TF = False
-        # sub_questions_passage, sub_questions_problems = sub_questions(df)
-        # st.write(sub_questions_passage, sub_questions_problems)
 
         # 하위 문제 (지문 평가, 문제 평가) 받아오기
         if not sub_TF and row.지문평가1:
@@ -68,52 +35,6 @@ def get_data():
             sub_questions_problems = [row.문제평가1, row.문제평가2, row.문제평가3, row.지문평가4]
             sub_TF = True
         
-        # sub_questions_passage, sub_questions_problems = sub_questions(row)
-        # st.write(sub_questions_passage, sub_questions_problems)
-
-
-        
-        # sub_questions = []
-        # sub_idx = 1
-        # while True:
-        #     # 하위 질문 컬럼명 생성
-        #     sub_question_col = f"하위 질문{sub_idx}"        
-                        
-        #     #하위 질문이 있는지 확인
-        #     if hasattr(row, sub_question_col) and getattr(row, sub_question_col):
-        #         sub_question_text = getattr(row, sub_question_col)
-                
-        #         # 하위 질문 선지 처리
-        #         sub_choices = []
-        #         for i in range(1, 6):
-        #             choice_col = f"하위 질문{sub_idx} 선지{i}"
-        #             if hasattr(row, choice_col) and getattr(row, choice_col):  # 선지가 존재할 때만 추가
-        #                 sub_choices.append(getattr(row, choice_col))
-                
-        #         # 하위 질문 정답 처리
-        #         answer_col = f"하위 질문{sub_idx} 정답"
-        #         sub_answer = None
-        #         if hasattr(row, answer_col) and getattr(row, answer_col):  # 정답이 존재할 때만 처리
-        #             sub_answer = int(getattr(row, answer_col))
-                
-        #         # 하위 질문 추가
-        #         sub_questions.append({
-        #             "question": sub_question_text,
-        #             "choices": sub_choices,
-        #             "answer": sub_answer
-        #         })
-                
-        #         # 다음 하위 질문으로
-        #         sub_idx += 1
-        #     else:
-        #         break  # 더 이상 하위 질문이 없으면 반복 종료
-
-
-
-
-
-
-
     
         # 질문 추가
         tabs_data[tab_name]["questions"].append({
@@ -209,16 +130,6 @@ def second_page():
         correct_status_key = f"correct_status_tab{tab_idx}"
         if correct_status_key not in st.session_state:
             st.session_state[correct_status_key] = [None] * len(tabs_data[tab_idx]["questions"])  # 각 문제별 정답 여부 초기화
-
-        # # 하위 문제 답안 세션 초기화
-        # subquestions_key = f"subquestions_tab{tab_idx}"
-        # if subquestions_key not in st.session_state:
-        #     # 하위 문제를 딕셔너리로 정의하여 초기화
-        #     st.session_state[subquestions_key] = {
-        #         f"subq_{q_idx+1}": [None] * len(question["subquestions"])
-        #         for q_idx, question in enumerate(tabs_data[tab_idx]["questions"])
-        #         if "subquestions" in question  # 하위 문제가 있는 경우만 처리
-        #     }
 
         # 하위 문제 답안 세션 초기화
         passage_key = f"subquestions_passage_tab{tab_idx}"
@@ -343,49 +254,6 @@ def second_page():
                         st.subheader(f"{idx + 1}-{sub_idx + 1}")
                         # st.write(sub_q["question"])
                         st.write(sub_q)
-            
-                        # # 고유한 key 생성
-                        # sub_key = f"sub_question_{st.session_state.current_tab}_{idx}_{sub_idx}"
-                        # selected_sub = st.radio(
-                        #     f"{idx + 1}-{sub_idx + 1}의 답을 선택하세요:",
-                        #     sub_q["choices"],
-                        #     index=None,
-                        #     key=sub_key
-                        # )
-
-                        # # 고유한 key 생성
-                        # sub_key = f"sub_question_{st.session_state.current_tab}_{idx}_{sub_idx}"
-                        
-                        # # 슬라이더로 1 ~ 5 사이 점수 선택
-                        # selected_sub = st.slider(
-                        #     f"{idx + 1}-{sub_idx + 1}의 답을 선택하세요:",
-                        #     min_value=1,  # 최소 값
-                        #     max_value=5,  # 최대 값
-                        #     value=3,  # 기본값 (중간 값으로 설정)
-                        #     step=1,  # 1단위로 증가
-                        #     key=sub_key
-                        # )
-
-            
-                        # # 하위 문제 답안 저장
-                        # if f"{idx}-sub" not in st.session_state[tab_key]:
-                        #     st.session_state[tab_key][f"{idx}-sub"] = {}
-                        # st.session_state[tab_key][f"{idx}-sub"][f"{sub_idx}"] = (
-                        #     sub_q["choices"].index(selected_sub) if selected_sub else None
-                        # )
-
-                        # # 고유한 key 생성 및 슬라이더로 점수 선택
-                        # for problems_q_key, sub_answers in st.session_state[problems_key].items():
-                        #     # for sub_idx, _ in enumerate(sub_answers):
-                        #     sub_key = f"sub_question_{problems_q_key}_sub{sub_idx+1}"
-                        #     st.session_state[problems_key][problems_q_key][sub_idx] = st.slider(
-                        #         f"문제 평가 {problems_q_key} - {sub_idx + 1}의 답을 선택하세요:",
-                        #         min_value=1,  # 최소 값
-                        #         max_value=5,  # 최대 값
-                        #         value=3,  # 기본값 (중간 값으로 설정)
-                        #         step=1,  # 1단위로 증가
-                        #         key=sub_key
-                        #     )
 
                         # 고유한 key 생성 및 라디오 버튼으로 점수 선택
                         for problems_q_key, sub_answers in st.session_state[problems_key].items():
@@ -413,60 +281,6 @@ def second_page():
                         #             key=sub_answer_key
                         #         )
 
-
-    
-            # 3️⃣ 하위 문제들 (세 번째 컬럼부터 오른쪽에 배치)
-            # sub_questions = q.get("sub_questions", [])
-            # for sub_idx, sub_q in enumerate(sub_questions):
-            #     col_position = sub_idx + 2  # 세 번째 컬럼부터 배치
-    
-            #     if col_position < len(cols):  # 컬럼 범위를 초과하지 않도록
-            #         with cols[col_position]:
-            #             st.subheader(f"{idx + 1}-{sub_idx + 1}")
-            #             st.write(sub_q["question"])
-    
-            #             # 고유한 key 생성
-            #             sub_key = f"sub_question_{st.session_state.current_tab}_{idx}_{sub_idx}"
-            #             selected_sub = st.radio(
-            #                 f"{idx + 1}-{sub_idx + 1}의 답을 선택하세요:",
-            #                 sub_q["choices"],
-            #                 index=None,
-            #                 key=sub_key
-            #             )
-    
-            #             # 하위 문제 답안 저장
-            #             if f"{idx}-sub" not in st.session_state[tab_key]:
-            #                 st.session_state[tab_key][f"{idx}-sub"] = {}
-            #             st.session_state[tab_key][f"{idx}-sub"][f"{sub_idx}"] = (
-            #                 sub_q["choices"].index(selected_sub) if selected_sub else None
-            #             )
-
-
-
-
-
-    
-
-    # # 지문과 문제를 두 열로 나누기 (너비 비율 조정)
-    # left_col, right_col = st.columns([3, 4])
-
-    # # 왼쪽 열: 지문 출력
-    # with left_col:
-    #     st.header("지문")
-    #     st.write(passage)
-
-    # # 오른쪽 열: 문제 출력 및 답안 선택
-    # with right_col:
-    #     # 현재 탭에 해당하는 문제 리스트와 답안 리스트를 가져오기
-    #     for idx, q in enumerate(tabs_data[st.session_state.current_tab]["questions"]):
-    #         st.subheader(q["question"])
-    #         selected = st.radio(f"문제 {idx + 1}의 답을 선택하세요:", q["choices"], index=None, key=f"question_{idx}")
-
-    #         # 현재 탭에 해당하는 키에 답안을 저장
-    #         tab_key = f"answers_tab{st.session_state.current_tab}"
-    #         st.session_state[tab_key][idx] = q["choices"].index(selected) if selected else None
-
-    #         st.markdown("  ")
 
     # 제출 버튼
     if st.button("답안 제출하기"):
