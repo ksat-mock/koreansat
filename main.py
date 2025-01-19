@@ -269,7 +269,7 @@ def second_page():
                             st.markdown("""
                                 <style>
                                     .sub-question-container-1 {
-                                        background-color: #c0c0c0;  /* 배경색 설정 */
+                                        background-color: #d0d0d0;  /* 배경색 설정 */
                                         padding: 10px;              /* 내부 여백 */
                                         border-radius: 5px;         /* 둥근 모서리 */
                                         margin-bottom: 10px;        /* 하단 여백 */
@@ -304,7 +304,9 @@ def second_page():
                                     index=None,  # 기본값 없음
                                     key=sub_key
                                 )
-                
+
+                            st.write(st.session_state[passage_key][problems_q_key][sub_idx])
+
                             # 배경색 div 종료
                             st.markdown('</div>', unsafe_allow_html=True)
 
