@@ -303,6 +303,8 @@ def second_page():
                         #             step=1,
                         #             key=sub_answer_key
                         #         )
+    
+                break
 
 
     # 제출 버튼
