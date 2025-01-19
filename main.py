@@ -260,7 +260,8 @@ def second_page():
             
                 if col_position < sub_col_end:  # 컬럼 범위를 초과하지 않도록 제한
                     with cols[col_position]:
-                        st.subheader(f"{idx + 1}-{sub_idx + 1}")
+                        # st.subheader(f"{idx + 1}-{sub_idx + 1}")
+                        st.markdown(f"<p style='font-size:14px; font-weight:bold;'>문제 평가 {idx + 1}-{sub_idx + 1}</p>", unsafe_allow_html=True)
                         # st.write(sub_q["question"])
                         st.write(sub_q)
 
@@ -268,10 +269,14 @@ def second_page():
                         for problems_q_key, sub_answers in st.session_state[problems_key].items():
                             # for sub_idx, _ in enumerate(sub_answers):
                             sub_key = f"sub_question_{idx + 1}_{problems_q_key}_sub{sub_idx+1}"
-                            if sub_sub["sub_sub_questions_problems"][sub_idx] is not None:
-                                sub_question = f"({sub_sub["sub_sub_questions_problems"][sub_idx]})"
+
+                            # NaN 또는 None 확인 및 처리
+                            sub_problem_value = sub_sub["sub_sub_questions_problems"][sub_idx]
+                            if sub_problem_value is not None and not (isinstance(sub_problem_value, float) and math.isnan(sub_problem_value)):
+                                sub_question = f"({sub_problem_value})"
                             else:
-                                sub_question = " "
+                                sub_question = " "  # 빈 문자열로 대체
+                                
                             st.session_state[problems_key][problems_q_key][sub_idx] = st.radio(
                                 # f"문제 평가 {problems_q_key} - {sub_idx + 1}의 답을 선택하세요:",
                                 # f"{tabs_data[tabs[0]]["questions"]["sub_sub_questions_problems"][sub_idx]}",
