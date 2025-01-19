@@ -428,6 +428,45 @@ def second_page():
 
         with cols[1]:
             # '평가 제출하기' 버튼 추가
+            # if st.button("평가 제출하기"):
+            #     all_selected = True  # 기본적으로 모두 선택된 것으로 가정
+            
+            #     # 현재 탭에 대한 지문 관련 문제와 문제 관련 문제 체크
+            #     tab_idx = st.session_state.current_tab  # 현재 탭 가져오기
+            #     passage_key = f"subquestions_passage_tab{tab_idx}"
+            #     problems_key = f"subquestions_problems_tab{tab_idx}"
+            
+            #     # 1️⃣ 지문 관련 문제 체크 (한 탭에 4개)
+            #     for problems_q_key, sub_answers in st.session_state.get(passage_key, {}).items():
+            #         for sub_idx, value in enumerate(sub_answers):
+            #             # 4개 항목 확인
+            #             if value is None:
+            #                 all_selected = False
+            #                 st.error(f"선택되지 않은 항목: {problems_q_key} - 지문 관련 문제 {sub_idx + 1}")  # 선택되지 않은 항목
+            #                 break
+            
+            #     # 2️⃣ 문제 관련 문제 체크 (각 문제마다 4개)
+            #     if all_selected:  # 지문 관련 문제가 다 선택되었다면, 문제 관련 문제 체크
+            #         for idx, q in enumerate(tabs_data[tab_idx]["questions"]):
+            #             problem_sub_answers = st.session_state.get(f"subquestions_problems_tab{tab_idx}", {}).get(f"problems_q{idx+1}", [])
+            #             for sub_idx, value in enumerate(problem_sub_answers):
+            #                 # 각 문제마다 4개 항목 확인
+            #                 if value is None:
+            #                     all_selected = False
+            #                     st.error(f"선택되지 않은 항목: 문제 {idx+1} - 문제 관련 문제 {sub_idx + 1}")  # 선택되지 않은 항목
+            #                     break
+
+            #     st.write(st.session_state.get(passage_key, {}))
+            #     st.write(st.session_state.get(f"subquestions_problems_tab{tab_idx}", {}))
+                
+            #     # 평가 완료 여부에 대한 메시지 출력
+            #     if all_selected:
+            #         st.session_state[f"evaluation_submitted_tab{tab_idx}"] = True
+            #         st.success("지문 및 문제 평가를 완료하였습니다!")
+            #     else:
+            #         st.error("모든 문제에 대해 평가를 선택해주세요.")
+
+            # '평가 제출하기' 버튼 추가
             if st.button("평가 제출하기"):
                 all_selected = True  # 기본적으로 모두 선택된 것으로 가정
             
@@ -439,8 +478,8 @@ def second_page():
                 # 1️⃣ 지문 관련 문제 체크 (한 탭에 4개)
                 for problems_q_key, sub_answers in st.session_state.get(passage_key, {}).items():
                     for sub_idx, value in enumerate(sub_answers):
-                        # 4개 항목 확인
-                        if value is None:
+                        # 4개 항목 확인: 값이 None 또는 1, 2, 3, 4, 5가 아닌 값이 들어가면 안됨
+                        if value not in [1, 2, 3, 4, 5]:
                             all_selected = False
                             st.error(f"선택되지 않은 항목: {problems_q_key} - 지문 관련 문제 {sub_idx + 1}")  # 선택되지 않은 항목
                             break
@@ -450,21 +489,19 @@ def second_page():
                     for idx, q in enumerate(tabs_data[tab_idx]["questions"]):
                         problem_sub_answers = st.session_state.get(f"subquestions_problems_tab{tab_idx}", {}).get(f"problems_q{idx+1}", [])
                         for sub_idx, value in enumerate(problem_sub_answers):
-                            # 각 문제마다 4개 항목 확인
-                            if value is None:
+                            # 각 문제마다 4개 항목 확인: 값이 None 또는 1, 2, 3, 4, 5가 아닌 값이 들어가면 안됨
+                            if value not in [1, 2, 3, 4, 5]:
                                 all_selected = False
                                 st.error(f"선택되지 않은 항목: 문제 {idx+1} - 문제 관련 문제 {sub_idx + 1}")  # 선택되지 않은 항목
                                 break
-
-                st.write(st.session_state.get(passage_key, {}))
-                st.write(st.session_state.get(f"subquestions_problems_tab{tab_idx}", {}))
-                
+            
                 # 평가 완료 여부에 대한 메시지 출력
                 if all_selected:
                     st.session_state[f"evaluation_submitted_tab{tab_idx}"] = True
                     st.success("지문 및 문제 평가를 완료하였습니다!")
                 else:
                     st.error("모든 문제에 대해 평가를 선택해주세요.")
+
 
 
     
