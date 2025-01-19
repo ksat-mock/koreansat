@@ -55,14 +55,16 @@ def get_data():
     return tabs_data
     
 
+tabs_data = get_data()
+
 ##########################################################
 ##########################################################
 
 
 # 첫 번째 페이지: 전화번호 뒷자리 4자리를 입력 받는 페이지
 def first_page():
-    st.title("전교 일등의 비밀")
-    st.subtitle("LLM-as-a-Judge를 이용한 수능 문제 출제 및 평가")
+    st.markdown("# 전교 일등의 비밀")
+    st.markdown("## LLM-as-a-Judge를 이용한 수능 문제 출제 및 평가")
     st.title("  ")
     st.title("  ")
     st.title("전화번호 뒷자리 입력")
@@ -97,8 +99,6 @@ def second_page():
         """,
         unsafe_allow_html=True
     )
-
-    tabs_data = get_data()
     
     # st.caption(tabs_data)
 
