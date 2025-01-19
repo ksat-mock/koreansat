@@ -65,36 +65,75 @@ def get_data():
     return tabs_data, sub_sub
 
 
-# 구글 시트에 세션 데이터 저장 함수
+# # 구글 시트에 세션 데이터 저장 함수
+# def save_data_to_gsheet():
+#     # GSheets 연결 객체 생성
+#     conn = st.connection("gsheets", type=GSheetsConnection)
+
+#     # 저장할 데이터 준비
+#     tab_idx = st.session_state.current_tab  # 현재 탭
+#     tab_key = f"answers_tab{tab_idx}"  # 사용자 답안 키
+#     passage_key = f"subquestions_passage_tab{tab_idx}"  # 지문 평가 키
+#     problems_key = f"subquestions_problems_tab{tab_idx}"  # 문제 평가 키
+
+#     # 사용자 답안과 평가 데이터 추출
+#     user_answers = st.session_state.get(tab_key, [])
+#     passage_eval = st.session_state.get(passage_key, {})
+#     problems_eval = st.session_state.get(problems_key, {})
+
+#     # 저장할 데이터프레임 생성
+#     data_to_save = {
+#         "탭": [tab_idx] * len(user_answers),
+#         "질문 번호": [i + 1 for i in range(len(user_answers))],
+#         "사용자 답안": user_answers,
+#         "지문 평가": [passage_eval.get(f"passage_q{i+1}", []) for i in range(len(user_answers))],
+#         "문제 평가": [problems_eval.get(f"problems_q{i+1}", []) for i in range(len(user_answers))],
+#     }
+#     df_to_save = pd.DataFrame(data_to_save)
+
+#     # A33 이후부터 데이터 추가
+#     existing_data = conn.read()
+#     next_row = len(existing_data) + 1  # 기존 데이터 길이를 기준으로 다음 행 계산
+#     conn.update(df_to_save, range=f"A{next_row}")
+
+
 def save_data_to_gsheet():
     # GSheets 연결 객체 생성
     conn = st.connection("gsheets", type=GSheetsConnection)
 
     # 저장할 데이터 준비
-    tab_idx = st.session_state.current_tab  # 현재 탭
-    tab_key = f"answers_tab{tab_idx}"  # 사용자 답안 키
-    passage_key = f"subquestions_passage_tab{tab_idx}"  # 지문 평가 키
-    problems_key = f"subquestions_problems_tab{tab_idx}"  # 문제 평가 키
+    tab_idx = st.session_state.current_tab
+    tab_key = f"answers_tab{tab_idx}"
+    passage_key = f"subquestions_passage_tab{tab_idx}"
+    problems_key = f"subquestions_problems_tab{tab_idx}"
 
-    # 사용자 답안과 평가 데이터 추출
     user_answers = st.session_state.get(tab_key, [])
     passage_eval = st.session_state.get(passage_key, {})
     problems_eval = st.session_state.get(problems_key, {})
 
-    # 저장할 데이터프레임 생성
-    data_to_save = {
-        "탭": [tab_idx] * len(user_answers),
-        "질문 번호": [i + 1 for i in range(len(user_answers))],
-        "사용자 답안": user_answers,
-        "지문 평가": [passage_eval.get(f"passage_q{i+1}", []) for i in range(len(user_answers))],
-        "문제 평가": [problems_eval.get(f"problems_q{i+1}", []) for i in range(len(user_answers))],
-    }
-    df_to_save = pd.DataFrame(data_to_save)
+    # 저장할 데이터 리스트 생성
+    data_to_save = []
+    for i, answer in enumerate(user_answers):
+        row = [
+            tab_idx,
+            i + 1,
+            answer,
+            passage_eval.get(f"passage_q{i+1}", ""),
+            problems_eval.get(f"problems_q{i+1}", "")
+        ]
+        data_to_save.append(row)
 
-    # A33 이후부터 데이터 추가
+    # 기존 데이터 읽기
     existing_data = conn.read()
     next_row = len(existing_data) + 1  # 기존 데이터 길이를 기준으로 다음 행 계산
-    conn.update(df_to_save, range=f"A{next_row}")
+
+    # 데이터 업데이트
+    if data_to_save:
+        update_range = f"A{next_row}:E{next_row + len(data_to_save) - 1}"
+        conn.update(worksheet="시트1", data=data_to_save, range=update_range)
+
+    st.success("데이터가 성공적으로 저장되었습니다.")
+
 
 
 
