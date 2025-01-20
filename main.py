@@ -6,6 +6,8 @@ import json
 from streamlit_gsheets import GSheetsConnection
 import math
 import pandas as pd
+import firebase_admin
+from firebase_admin import credentials, db
 
 
 def get_data():
@@ -64,6 +66,56 @@ def get_data():
     
     return tabs_data, sub_sub
 
+def initialize_firebase():
+    """Firebase 초기화 함수."""
+    if not firebase_admin._apps:  # 이미 초기화된 경우 방지
+        cred = credentials.Certificate({
+            "type": st.secrets["firebase"]["type"],
+            "project_id": st.secrets["firebase"]["project_id"],
+            "private_key_id": st.secrets["firebase"]["private_key_id"],
+            "private_key": st.secrets["firebase"]["private_key"].replace("\\n", "\n"),
+            "client_email": st.secrets["firebase"]["client_email"],
+            "client_id": st.secrets["firebase"]["client_id"],
+            "auth_uri": st.secrets["firebase"]["auth_uri"],
+            "token_uri": st.secrets["firebase"]["token_uri"],
+            "auth_provider_x509_cert_url": st.secrets["firebase"]["auth_provider_x509_cert_url"],
+            "client_x509_cert_url": st.secrets["firebase"]["client_x509_cert_url"]
+        })
+        firebase_admin.initialize_app(cred, {
+            "databaseURL": "https://your-database-name.firebaseio.com"
+        })
+
+
+def save_data_to_firebase():
+    """Firebase에 데이터를 저장하는 함수."""
+    initialize_firebase()
+
+    # 현재 탭 정보 가져오기
+    tab_idx = st.session_state.current_tab
+    tab_key = f"answers_tab{tab_idx}"
+    passage_key = f"subquestions_passage_tab{tab_idx}"
+    problems_key = f"subquestions_problems_tab{tab_idx}"
+
+    # 세션 상태에서 사용자 데이터 가져오기
+    user_answers = st.session_state.get(tab_key, [])
+    passage_eval = st.session_state.get(passage_key, {})
+    problems_eval = st.session_state.get(problems_key, {})
+
+    # 저장할 데이터 생성
+    data_to_save = {
+        "탭": tab_idx,
+        "사용자 답안": user_answers,
+        "지문 평가": {f"passage_q{i+1}": passage_eval.get(f"passage_q{i+1}", "") for i in range(len(user_answers))},
+        "문제 평가": {f"problems_q{i+1}": problems_eval.get(f"problems_q{i+1}", "") for i in range(len(user_answers))},
+    }
+
+    # Firebase 경로 설정 및 데이터 업로드
+    ref = db.reference(f"tabs_data/tab_{tab_idx}")
+    ref.set(data_to_save)  # Firebase의 set() 메서드로 데이터 저장
+
+    st.success(f"Tab {tab_idx} 데이터가 Firebase에 저장되었습니다!")
+
+
 
 # # 구글 시트에 세션 데이터 저장 함수
 # def save_data_to_gsheet():
@@ -97,42 +149,42 @@ def get_data():
 #     conn.update(df_to_save, range=f"A{next_row}")
 
 
-def save_data_to_gsheet():
-    # GSheets 연결 객체 생성
-    conn = st.connection("gsheets", type=GSheetsConnection)
+# def save_data_to_gsheet():
+#     # GSheets 연결 객체 생성
+#     conn = st.connection("gsheets", type=GSheetsConnection)
 
-    # 저장할 데이터 준비
-    tab_idx = st.session_state.current_tab
-    tab_key = f"answers_tab{tab_idx}"
-    passage_key = f"subquestions_passage_tab{tab_idx}"
-    problems_key = f"subquestions_problems_tab{tab_idx}"
+#     # 저장할 데이터 준비
+#     tab_idx = st.session_state.current_tab
+#     tab_key = f"answers_tab{tab_idx}"
+#     passage_key = f"subquestions_passage_tab{tab_idx}"
+#     problems_key = f"subquestions_problems_tab{tab_idx}"
 
-    user_answers = st.session_state.get(tab_key, [])
-    passage_eval = st.session_state.get(passage_key, {})
-    problems_eval = st.session_state.get(problems_key, {})
+#     user_answers = st.session_state.get(tab_key, [])
+#     passage_eval = st.session_state.get(passage_key, {})
+#     problems_eval = st.session_state.get(problems_key, {})
 
-    # 저장할 데이터 리스트 생성
-    data_to_save = []
-    for i, answer in enumerate(user_answers):
-        row = [
-            tab_idx,
-            i + 1,
-            answer,
-            passage_eval.get(f"passage_q{i+1}", ""),
-            problems_eval.get(f"problems_q{i+1}", "")
-        ]
-        data_to_save.append(row)
+#     # 저장할 데이터 리스트 생성
+#     data_to_save = []
+#     for i, answer in enumerate(user_answers):
+#         row = [
+#             tab_idx,
+#             i + 1,
+#             answer,
+#             passage_eval.get(f"passage_q{i+1}", ""),
+#             problems_eval.get(f"problems_q{i+1}", "")
+#         ]
+#         data_to_save.append(row)
 
-    # 기존 데이터 읽기
-    existing_data = conn.read()
-    next_row = len(existing_data) + 1  # 기존 데이터 길이를 기준으로 다음 행 계산
+#     # 기존 데이터 읽기
+#     existing_data = conn.read()
+#     next_row = len(existing_data) + 1  # 기존 데이터 길이를 기준으로 다음 행 계산
 
-    # 데이터 업데이트
-    if data_to_save:
-        update_range = f"A{next_row}:E{next_row + len(data_to_save) - 1}"
-        conn.update(worksheet="시트1", data=data_to_save, range=update_range)
+#     # 데이터 업데이트
+#     if data_to_save:
+#         update_range = f"A{next_row}:E{next_row + len(data_to_save) - 1}"
+#         conn.update(worksheet="시트1", data=data_to_save, range=update_range)
 
-    st.success("데이터가 성공적으로 저장되었습니다.")
+#     st.success("데이터가 성공적으로 저장되었습니다.")
 
 
 
@@ -593,6 +645,7 @@ def second_page():
             #     else:
             #         st.error("모든 문제에 대해 평가를 선택해주세요.")
 
+                
             # '평가 제출하기' 버튼 추가
             if st.button("평가 제출하기"):
                 all_selected = True  # 기본적으로 모두 선택된 것으로 가정
@@ -633,7 +686,10 @@ def second_page():
                     st.success("지문 및 문제 평가를 완료하였습니다!")
 
                     # **구글 시트에 데이터 저장 호출**
-                    save_data_to_gsheet()
+                    # save_data_to_gsheet()
+
+                    # firebase에 데이터 저장
+                    save_data_to_firebase()
                 else:
                     st.error("모든 문제에 대해 평가를 선택해주세요.")
 
