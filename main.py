@@ -82,7 +82,7 @@ def initialize_firebase():
             "client_x509_cert_url": st.secrets["firebase"]["client_x509_cert_url"]
         })
         firebase_admin.initialize_app(cred, {
-            "databaseURL": "https://your-database-name.firebaseio.com"
+            "databaseURL": "https://korean-sat-6cdb5-default-rtdb.asia-southeast1.firebasedatabase.app"'
         })
 
 
