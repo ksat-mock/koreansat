@@ -308,9 +308,10 @@ def second_page():
         
         # 선택된 탭과 푼 탭을 구분하기 위한 스타일 설정
         if tab == st.session_state.current_tab:
-            style = "border: 2px solid #1E90FF; background-color: lightgreen; font-weight: bold;"  # 선택된 탭
+            style = "border: 2px solid #f04848; background-color: lightgreen; font-weight: bold;"  # 선택된 탭
+            # style = "border: 2px solid #1E90FF; background-color: lightgreen; font-weight: bold;"  # 선택된 탭
         elif tab in st.session_state["completed_tabs"]:  # 푼 탭을 체크
-            style = "border: 2px solid #a2c6e8; background-color: lightblue;"  # 푼 탭
+            style = "border: 2px solid #eb8686; background-color: lightblue;"  # 푼 탭
         else:
             style = ""  # 기본 스타일
 
