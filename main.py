@@ -327,13 +327,14 @@ def first_page():
     st.markdown("##### 전화번호 뒷자리 입력")
     phone_number = st.text_input("전화번호 뒷자리 4자리를 입력해주세요:", max_chars=4)
 
+    st.markdown("##### 나이")
+    age = st.slider("(만)나이를 선택해주세요", min_value=10, max_value=70, value=25)
+    age = st.number_input("(만)나이를 입력하세요", min_value=0, max_value=120, value=25)
+
     st.title("  ")
 
-    st.markdown("##### 나이")
-    age = st.slider("나이를 선택해주세요", min_value=10, max_value=80)
-
     if st.button("다음"):
-        if phone_number and phone_number.isdigit() and len(str(phone_number)) == 4:
+        if phone_number and phone_number.isdigit() and len(str(phone_number)) == 4 and age.isdigit():
             st.session_state.phone_number = phone_number
             st.session_state.page = "second"  # 두 번째 페이지로 이동
             st.rerun()  # 페이지 강제 새로고침
