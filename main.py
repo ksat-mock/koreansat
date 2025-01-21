@@ -146,7 +146,7 @@ def save_data_to_firestore():
 
 # 첫 번째 페이지: 전화번호 뒷자리 4자리를 입력 받는 페이지
 def first_page():
-    st.markdown("# 전교 일등의 비밀")
+    st.markdown("# [ 전교 일등의 비밀 ]")
     st.markdown("#### LLM-as-a-Judge를 이용한 수능 문제 출제 및 평가")
     st.title("  ")
     
@@ -272,6 +272,7 @@ def second_page():
     # 평가 기준 설명
     st.markdown("#### 전교 일등의 비밀")
     st.markdown("##### LLM-as-a-Judge를 이용한 수능 문제 출제 및 평가")
+    st.caption("")
 
 
     # st.markdown("##### 다음 평가 기준에 따라 4개의 수능 국어 지문/문제를 평가해주세요")
