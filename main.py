@@ -96,6 +96,9 @@ def save_data_to_firestore():
     """Firestore에 데이터를 저장하는 함수."""
     db = initialize_firestore()
 
+    # 전화번호 뒷자리 가져오기
+    phone_number = st.session_state.get("phone_number")
+
     # 현재 탭 정보 가져오기
     tab_idx = st.session_state.current_tab
     tab_key = f"answers_tab{tab_idx}"
@@ -109,14 +112,17 @@ def save_data_to_firestore():
 
     # 저장할 데이터 생성
     data_to_save = {
+        "전화번호 뒷자리": phone_number,
         "탭": tab_idx,
         "사용자 답안": user_answers,
         "지문 평가": {f"passage_q{i+1}": passage_eval.get(f"passage_q{i+1}", "") for i in range(len(user_answers))},
         "문제 평가": {f"problems_q{i+1}": problems_eval.get(f"problems_q{i+1}", "") for i in range(len(user_answers))},
+        "제출 시간": firestore.SERVER_TIMESTAMP,  # Firestore 서버 시간
     }
 
-    # Firestore 경로 설정 및 데이터 업로드
-    doc_ref = db.collection("tabs_data").document(f"tab_{tab_idx}")
+    # Firestore 경로 설정 (폰 번호 기반 고유 ID 생성)
+    doc_id = f"{phone_number}_tab_{tab_idx}"  # 고유 문서 ID
+    doc_ref = db.collection("tabs_data").document(doc_id)
     doc_ref.set(data_to_save)  # Firestore의 set() 메서드로 데이터 저장
 
     st.success(f"Tab {tab_idx} 데이터가 Firestore에 저장되었습니다!")
