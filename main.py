@@ -491,7 +491,7 @@ def second_page():
     
                 # 답안 저장
                 st.session_state[tab_key][idx] = (
-                    q["choices"].index(selected_main) if selected_main else None
+                    q["choices"].index(selected_main + 1) if selected_main else None
                 )
 
 
@@ -635,7 +635,7 @@ def second_page():
                     tab_key = f"answers_tab{st.session_state.current_tab}"
         
                     for idx, answer in enumerate(st.session_state[tab_key]):
-                        selected_choice = answer + 1 if answer is not None else "선택 안 함"
+                        selected_choice = answer if answer is not None else "선택 안 함"
                         # st.write(f"문제 {idx + 1}: {selected_choice}")
                     st.write("   ")
         
@@ -652,7 +652,7 @@ def second_page():
                     result = []
                     for idx, answer in enumerate(st.session_state[tab_key]):
                         # 정답 여부를 correct_status에 저장
-                        is_correct = answer == correct_answers[idx] -1
+                        is_correct = answer == correct_answers[idx]
                         st.session_state[correct_status_key][idx] = is_correct
         
                         correct = "맞았습니다" if is_correct else "틀렸습니다"
