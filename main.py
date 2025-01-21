@@ -445,7 +445,7 @@ def second_page():
                                     key=sub_key
                                 )
 
-                                st.session_state[passage_key][problems_q_key][sub_idx] = selected passage
+                                st.session_state[passage_key][problems_q_key][sub_idx] = selected passage if selected_passage else None
                                 
                                 break
 
@@ -501,13 +501,15 @@ def second_page():
                             for line in sub_question:
                                 st.caption(line)
             
-                            st.session_state[problems_key][problems_q_key][sub_idx] = st.radio(
+                            selected_problems = st.radio(
                                 # "    ".join(sub_question),
                                 "",
                                 options=[5, 4, 3, 2, 1],  # 1부터 5까지 선택 가능
                                 index=None,  # 기본값 없음
                                 key=sub_key
                             )
+
+                            st.session_state[problems_key][problems_q_key][sub_idx] = selected_problems if selected_passage else None
 
                             break
 
