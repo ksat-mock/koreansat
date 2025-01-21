@@ -7,6 +7,7 @@ from streamlit_gsheets import GSheetsConnection
 import math
 import pandas as pd
 import firebase_admin
+from firebase_admin import firestore
 from firebase_admin import credentials, db
 
 
@@ -66,8 +67,11 @@ def get_data():
     
     return tabs_data, sub_sub
 
-def initialize_firebase():
-    """Firebase 초기화 함수."""
+
+
+
+def initialize_firestore():
+    """Firestore 초기화 함수."""
     if not firebase_admin._apps:  # 이미 초기화된 경우 방지
         cred = credentials.Certificate({
             "type": st.secrets["firebase"]["type"],
@@ -81,15 +85,16 @@ def initialize_firebase():
             "auth_provider_x509_cert_url": st.secrets["firebase"]["auth_provider_x509_cert_url"],
             "client_x509_cert_url": st.secrets["firebase"]["client_x509_cert_url"]
         })
-        firebase_admin.initialize_app(cred, {
-            "databaseURL": "https://korean-sat-6cdb5-default-rtdb.asia-southeast1.firebasedatabase.app/"
-            # "databaseURL": "https://korean-sat-6cdb5.firebaseio.com"
-        })
+        firebase_admin.initialize_app(cred)
+
+    # Firestore 초기화
+    return firestore.client()
 
 
-def save_data_to_firebase():
-    """Firebase에 데이터를 저장하는 함수."""
-    initialize_firebase()
+
+def save_data_to_firestore():
+    """Firestore에 데이터를 저장하는 함수."""
+    db = initialize_firestore()
 
     # 현재 탭 정보 가져오기
     tab_idx = st.session_state.current_tab
@@ -110,11 +115,71 @@ def save_data_to_firebase():
         "문제 평가": {f"problems_q{i+1}": problems_eval.get(f"problems_q{i+1}", "") for i in range(len(user_answers))},
     }
 
-    # Firebase 경로 설정 및 데이터 업로드
-    ref = db.reference(f"tabs_data/tab_{tab_idx}")
-    ref.set(data_to_save)  # Firebase의 set() 메서드로 데이터 저장
+    # Firestore 경로 설정 및 데이터 업로드
+    doc_ref = db.collection("tabs_data").document(f"tab_{tab_idx}")
+    doc_ref.set(data_to_save)  # Firestore의 set() 메서드로 데이터 저장
 
-    st.success(f"Tab {tab_idx} 데이터가 Firebase에 저장되었습니다!")
+    st.success(f"Tab {tab_idx} 데이터가 Firestore에 저장되었습니다!")
+
+
+
+
+
+
+# def initialize_firebase():
+#     """Firebase 초기화 함수."""
+#     if not firebase_admin._apps:  # 이미 초기화된 경우 방지
+#         cred = credentials.Certificate({
+#             "type": st.secrets["firebase"]["type"],
+#             "project_id": st.secrets["firebase"]["project_id"],
+#             "private_key_id": st.secrets["firebase"]["private_key_id"],
+#             "private_key": st.secrets["firebase"]["private_key"].replace("\\n", "\n"),
+#             "client_email": st.secrets["firebase"]["client_email"],
+#             "client_id": st.secrets["firebase"]["client_id"],
+#             "auth_uri": st.secrets["firebase"]["auth_uri"],
+#             "token_uri": st.secrets["firebase"]["token_uri"],
+#             "auth_provider_x509_cert_url": st.secrets["firebase"]["auth_provider_x509_cert_url"],
+#             "client_x509_cert_url": st.secrets["firebase"]["client_x509_cert_url"]
+#         })
+#         firebase_admin.initialize_app(cred, {
+#             "databaseURL": "https://korean-sat-6cdb5-default-rtdb.asia-southeast1.firebasedatabase.app/"
+#             # "databaseURL": "https://korean-sat-6cdb5.firebaseio.com"
+#         })
+
+
+# def save_data_to_firebase():
+#     """Firebase에 데이터를 저장하는 함수."""
+#     initialize_firebase()
+
+#     # 현재 탭 정보 가져오기
+#     tab_idx = st.session_state.current_tab
+#     tab_key = f"answers_tab{tab_idx}"
+#     passage_key = f"subquestions_passage_tab{tab_idx}"
+#     problems_key = f"subquestions_problems_tab{tab_idx}"
+
+#     # 세션 상태에서 사용자 데이터 가져오기
+#     user_answers = st.session_state.get(tab_key, [])
+#     passage_eval = st.session_state.get(passage_key, {})
+#     problems_eval = st.session_state.get(problems_key, {})
+
+#     # 저장할 데이터 생성
+#     data_to_save = {
+#         "탭": tab_idx,
+#         "사용자 답안": user_answers,
+#         "지문 평가": {f"passage_q{i+1}": passage_eval.get(f"passage_q{i+1}", "") for i in range(len(user_answers))},
+#         "문제 평가": {f"problems_q{i+1}": problems_eval.get(f"problems_q{i+1}", "") for i in range(len(user_answers))},
+#     }
+
+#     # Firebase 경로 설정 및 데이터 업로드
+#     ref = db.reference(f"tabs_data/tab_{tab_idx}")
+#     ref.set(data_to_save)  # Firebase의 set() 메서드로 데이터 저장
+
+#     st.success(f"Tab {tab_idx} 데이터가 Firebase에 저장되었습니다!")
+
+
+
+
+
 
 
 
@@ -186,6 +251,7 @@ def save_data_to_firebase():
 #         conn.update(worksheet="시트1", data=data_to_save, range=update_range)
 
 #     st.success("데이터가 성공적으로 저장되었습니다.")
+
 
 
 
@@ -690,7 +756,11 @@ def second_page():
                     # save_data_to_gsheet()
 
                     # firebase에 데이터 저장
-                    save_data_to_firebase()
+                    # save_data_to_firebase()
+
+                    save_data_to_firestore()  # Firestore에 데이터 저장
+                    st.success("평가 데이터가 성공적으로 제출되었습니다!")
+                    
                 else:
                     st.error("모든 문제에 대해 평가를 선택해주세요.")
 
