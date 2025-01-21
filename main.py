@@ -250,13 +250,17 @@ def second_page():
 
     
     # 평가 기준 설명
-    st.markdown("##### 전교 일등의 비밀 - LLM-as-a-Judge를 이용한 수능 문제 출제 및 평가")
+    st.markdown("#### 전교 일등의 비밀")
+    st.markdown("##### LLM-as-a-Judge를 이용한 수능 문제 출제 및 평가")
+
+
     # st.markdown("##### 다음 평가 기준에 따라 4개의 수능 국어 지문/문제를 평가해주세요")
     # st.subheader("아래 4개의 수능 국어 문제를 풀고, 다음 평가 기준에 따라 평가해주세요")
 
-    st.write("안녕하세요. 이 사이트는 LLM이 만든 수능 문제와 지문의 품질 평가를 위해 만들어졌습니다. 프로젝트를 개선해나가기 위해 여러분의 피드백을 받고자 합니다. 지문과 문제의 유창성, 난이도, 객관성 등 다양한 요소에 대한 평가를 부탁드립니다.")
+    st.write("안녕하세요. 이 사이트는 **LLM이 만든 수능 지문 및 문제의 품질 평가**를 위해 만들어졌습니다. 프로젝트를 개선해나가기 위해 여러분의 피드백을 받고자 합니다. 지문과 문제의 유창성, 난이도, 객관성 등 다양한 요소에 대한 평가를 부탁드립니다.")
 
-    st.write("문제를 풀고 답안을 제출하면 정답/오답 여부를 확인하실 수 있습니다. 5개 분야의 지문과 문제가 있습니다. 문제를 풀어본 후, 각각의 지문과 문제에 대해 평가해주세요. 4개의 지문-평가 질문, 4개의 문제-평가 질문에 대해 점수를 매긴 후 '평가 제출하기' 버튼을 눌러주시면 됩니다! 줄글 피드백에는 하고 싶으신 말씀을 적어주시면 되지만, 이는 필수가 아니므로 부담 없이 넘어가주셔도 됩니다!")
+    st.markdown("###### 이용 방법")
+    st.write("5개 분야의 지문과 문제가 있습니다. 문제를 풀어본 후, 각각의 지문과 문제에 대해 평가해주세요. **4개의 [지문] 평가**, **4개의 [문제] 평가**에 대해 점수를 매긴 후 '평가 제출하기' 버튼을 눌러주시면 됩니다! 줄글 피드백에는 하고 싶으신 말씀을 적어주시면 되지만, 이는 필수가 아니므로 부담 없이 넘어가주셔도 됩니다. 또한, 문제를 풀고 답안을 제출하면 정답/오답 여부를 확인하실 수 있습니다.")
     
     # # 평가 기준 설명
     # left_col_eval, right_col_eval = st.columns([3, 4])
@@ -275,14 +279,26 @@ def second_page():
 
     st.markdown("  ")
 
+    
     # 버튼 표시
     cols = st.columns(len(tabs))
     for i, tab in enumerate(tabs):
-        style = (
-            "border: 2px solid pink; background-color: lightgreen;"
-            if tab == st.session_state.current_tab
-            else ""
-        )
+        # style = (
+        #     "border: 2px solid pink; background-color: lightgreen;"
+        #     if tab == st.session_state.current_tab
+        #     else ""
+        # )
+
+        submitted_key = f"submitted_tab{tab}"
+        
+        # 선택된 탭과 푼 탭을 구분하기 위한 스타일 설정
+        if tab == st.session_state.current_tab:
+            style = "border: 2px solid pink; background-color: lightgreen; font-weight: bold;"  # 선택된 탭
+        # elif tab in st.session_state.completed_tabs:  # 푼 탭을 체크
+        elif st.session_state[submitted_key]:  # 푼 탭을 체크
+            style = "border: 2px solid blue; background-color: lightblue;"  # 푼 탭
+        else:
+            style = ""  # 기본 스타일
 
         if isinstance(tab, str):
             if cols[i].button(tab, key=f"tab_button_{i}"):
@@ -298,7 +314,7 @@ def second_page():
     # 타이틀
     st.markdown("  ")
     st.title("국어 영역")
-    st.markdown("  ")
+    st.title("  ")
 
 
 
