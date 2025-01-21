@@ -96,8 +96,9 @@ def save_data_to_firestore():
     """Firestore에 데이터를 저장하는 함수."""
     db = initialize_firestore()
 
-    # 전화번호 뒷자리 가져오기
+    # 전화번호 뒷자리, 나이 가져오기
     phone_number = st.session_state.get("phone_number")
+    age = st.session_state.get("age")
 
     # 현재 탭 정보 가져오기
     tab_idx = st.session_state.current_tab
@@ -113,6 +114,7 @@ def save_data_to_firestore():
     # 저장할 데이터 생성
     data_to_save = {
         "전화번호 뒷자리": phone_number,
+        "나이": age,
         "탭": tab_idx,
         "사용자 답안": user_answers,
         "지문 평가": {f"passage_q{i+1}": passage_eval.get(f"passage_q{i+1}", "") for i in range(len(user_answers))},
@@ -122,7 +124,7 @@ def save_data_to_firestore():
 
     # 전화번호를 기준으로 해당 탭의 콜렉션에 저장
     collection_name = f"tab_{tab_idx}"  # 각 탭마다 별도의 콜렉션
-    doc_id = f"user_{phone_number}"
+    doc_id = f"user_{phone_number}_{age}"
     doc_ref = db.collection(collection_name).document(doc_id)  # phone_number를 기준으로 문서 생성
     doc_ref.set(data_to_save)  # Firestore의 set() 메서드로 데이터 저장
 
@@ -330,12 +332,14 @@ def first_page():
     st.markdown("##### 나이")
     age = st.slider("(만)나이를 선택해주세요", min_value=10, max_value=70, value=25)
     age = st.number_input("(만)나이를 입력하세요", min_value=0, max_value=120, value=25)
+    age = st.selectbox("나이를 선택하세요:", range(10, 71))
 
     st.title("  ")
 
     if st.button("다음"):
         if phone_number and phone_number.isdigit() and len(str(phone_number)) == 4 and age.isdigit():
             st.session_state.phone_number = phone_number
+            st.session_state.age = age
             st.session_state.page = "second"  # 두 번째 페이지로 이동
             st.rerun()  # 페이지 강제 새로고침
         else:
