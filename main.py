@@ -491,7 +491,7 @@ def second_page():
     
                 # 답안 저장
                 st.session_state[tab_key][idx] = (
-                    q["choices"].index(selected_main + 1) if selected_main else None
+                    q["choices"].index(selected_main) + 1 if selected_main else None
                 )
 
 
