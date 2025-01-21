@@ -111,6 +111,10 @@ def save_data_to_firestore():
     passage_eval = st.session_state.get(passage_key, {})
     problems_eval = st.session_state.get(problems_key, {})
 
+    # 피드백 내용 가져오기
+    feedback_key = f"feedback_tab{tab_idx}"
+    feedback = st.session_state.get(feedback_key, "")
+
     # 저장할 데이터 생성
     data_to_save = {
         "전화번호 뒷자리": phone_number,
@@ -119,6 +123,7 @@ def save_data_to_firestore():
         "사용자 답안": user_answers,
         "지문 평가": {f"passage_q{i+1}": passage_eval.get(f"passage_q{i+1}", "") for i in range(len(user_answers))},
         "문제 평가": {f"problems_q{i+1}": problems_eval.get(f"problems_q{i+1}", "") for i in range(len(user_answers))},
+        "피드백": feedback,  # 피드백 추가
         "제출 시간": firestore.SERVER_TIMESTAMP,  # Firestore 서버 시간
     }
 
@@ -131,7 +136,8 @@ def save_data_to_firestore():
     # 기존에 데이터가 있으면 배열에 누적 (배열 방식)
     # doc_ref.set(data_to_save, merge=True)  # `merge=True`로 덮어쓰지 않고 기존 문서에 추가
 
-    st.success(f"Tab {tab_idx} 데이터가 Firestore의 {collection_name} 콜렉션에 저장되었습니다!")
+    # st.success(f"Tab {tab_idx} 데이터가 Firestore의 {collection_name} 콜렉션에 저장되었습니다!")
+    st.success(f"입력해주신 답변이 성공적으로 제출되었습니다. 감사합니다!")
 
 
 
@@ -799,6 +805,10 @@ def second_page():
 
             st.session_state[feedback_key] = feedback_input  # 입력 내용 저장
             st.session_state[feedback_submitted_key] = True  # 제출 상태 업데이트
+                
+            # 피드백이 제출되었을 때 Firestore에 데이터 저장
+            save_data_to_firestore()  # 평가 제출 시와 동일한 방식으로 데이터 저장
+            
         else:
             st.warning("피드백을 입력해주세요.")
 
