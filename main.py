@@ -310,6 +310,7 @@ def second_page():
 
         # 선택된 탭에 스타일을 적용
         cols[i].markdown(f'<div style="{style}"></div>', unsafe_allow_html=True)
+        st.rerun()  # 페이지 강제 새로고침
         
     current_data = tabs_data[st.session_state.current_tab]
     passage = current_data["passage"]
@@ -604,8 +605,6 @@ def second_page():
                     save_data_to_firestore()  # Firestore에 데이터 저장
                     # st.success("평가 데이터가 성공적으로 제출되었습니다!")
 
-                    # 세션 상태가 업데이트된 후 페이지를 자동으로 리렌더링하도록 요청
-                    st.experimental_rerun()  # 페이지의 렌더링을 강제로 다시 실행
                     
                 else:
                     st.error("모든 문제에 대해 평가를 선택해주세요.")
