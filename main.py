@@ -337,7 +337,7 @@ def first_page():
     st.subheader("  ")
 
     if st.button("다음"):
-        if phone_number and phone_number.isdigit() and len(str(phone_number)) == 4 and age.isinstance():
+        if phone_number and phone_number.isdigit() and len(str(phone_number)) == 4 and isinstance(age, int):
             st.session_state.phone_number = phone_number
             st.session_state.age = age
             st.session_state.page = "second"  # 두 번째 페이지로 이동
