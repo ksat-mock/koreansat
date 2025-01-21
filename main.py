@@ -120,12 +120,15 @@ def save_data_to_firestore():
         "제출 시간": firestore.SERVER_TIMESTAMP,  # Firestore 서버 시간
     }
 
-    # Firestore 경로 설정 (폰 번호 기반 고유 ID 생성)
-    doc_id = f"{phone_number}_tab_{tab_idx}"  # 고유 문서 ID
-    doc_ref = db.collection("tabs_data").document(doc_id)
-    doc_ref.set(data_to_save)  # Firestore의 set() 메서드로 데이터 저장
+    # 전화번호를 기준으로 해당 탭의 콜렉션에 저장
+    collection_name = f"tab_{tab_idx}"  # 각 탭마다 별도의 콜렉션
+    doc_id = f"user_{phone_number}"
+    doc_ref = db.collection(collection_name).document(doc_id)  # phone_number를 기준으로 문서 생성
 
-    st.success(f"Tab {tab_idx} 데이터가 Firestore에 저장되었습니다!")
+    # 기존에 데이터가 있으면 배열에 누적 (배열 방식)
+    # doc_ref.set(data_to_save, merge=True)  # `merge=True`로 덮어쓰지 않고 기존 문서에 추가
+
+    st.success(f"Tab {tab_idx} 데이터가 Firestore의 {collection_name} 콜렉션에 저장되었습니다!")
 
 
 
