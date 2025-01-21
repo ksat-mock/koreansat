@@ -424,7 +424,7 @@ def second_page():
                 
                             # 고유한 key 생성 및 라디오 버튼으로 점수 선택
                             for problems_q_key, sub_answers in st.session_state[passage_key].items():
-                                sub_key = f"sub_question_{idx + 1}_{problems_q_key}_sub{sub_idx+1}"
+                                sub_key = f"sub_question_{st.session_state.current_tab}_{idx + 1}_{problems_q_key}_sub{sub_idx+1}"
                 
                                 # NaN 또는 None 확인 및 처리
                                 sub_passage_value = sub_sub["sub_sub_questions_passage"][sub_idx]
@@ -488,7 +488,7 @@ def second_page():
             
                         # 고유한 key 생성 및 라디오 버튼으로 점수 선택
                         for problems_q_key, sub_answers in st.session_state[problems_key].items():
-                            sub_key = f"sub_question_{idx + 1}_{problems_q_key}_sub{sub_idx+1}"
+                            sub_key = f"sub_question_{st.session_state.current_tab}_{idx + 1}_{problems_q_key}_sub{sub_idx+1}"
             
                             # NaN 또는 None 확인 및 처리
                             sub_problem_value = sub_sub["sub_sub_questions_problems"][sub_idx]
