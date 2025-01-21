@@ -445,7 +445,7 @@ def second_page():
                                     key=sub_key
                                 )
 
-                                st.session_state[passage_key][problems_q_key][sub_idx] = selected passage if selected_passage else None
+                                st.session_state[passage_key][problems_q_key][sub_idx] = selected_passage if selected_passage else None
                                 
                                 break
 
