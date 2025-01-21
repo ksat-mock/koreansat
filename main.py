@@ -156,7 +156,7 @@ def first_page():
     st.subheader("  ")
 
     st.markdown("##### 나이")
-    age = st.selectbox("만 나이를 선택해주세요:", range(10, 71), index=None, placeholder="만 나이를 선택해 주세요...")
+    age = st.selectbox("만 나이를 선택해주세요:", range(15, 71), index=None, placeholder="만 나이를 선택해 주세요...")
     
     st.subheader("  ")
 
@@ -250,23 +250,28 @@ def second_page():
 
     
     # 평가 기준 설명
-    st.markdown("##### 다음 평가 기준에 따라 4개의 수능 국어 지문/문제를 평가해주세요")
+    st.markdown("##### 전교 일등의 비밀 - LLM-as-a-Judge를 이용한 수능 문제 출제 및 평가")
+    # st.markdown("##### 다음 평가 기준에 따라 4개의 수능 국어 지문/문제를 평가해주세요")
     # st.subheader("아래 4개의 수능 국어 문제를 풀고, 다음 평가 기준에 따라 평가해주세요")
 
-    # 평가 기준 설명
-    left_col_eval, right_col_eval = st.columns([3, 4])
+    st.write("안녕하세요. 이 사이트는 LLM이 만든 수능 문제와 지문의 품질 평가를 위해 만들어졌습니다. 프로젝트를 개선해나가기 위해 여러분의 피드백을 받고자 합니다. 지문과 문제의 유창성, 난이도, 객관성 등 다양한 요소에 대한 평가를 부탁드립니다.")
 
-    # 왼쪽 열: 지문 평가 기준
-    with left_col_eval:
-        st.write("[지문 평가 기준] ")
-        st.write("・  ")
-        st.write("・  ")
+    st.write("문제를 풀고 답안을 제출하면 정답/오답 여부를 확인하실 수 있습니다. 5개 분야의 지문과 문제가 있습니다. 문제를 풀어본 후, 각각의 지문과 문제에 대해 평가해주세요. 4개의 지문-평가 질문, 4개의 문제-평가 질문에 대해 점수를 매긴 후 '평가 제출하기' 버튼을 눌러주시면 됩니다! 줄글 피드백에는 하고 싶으신 말씀을 적어주시면 되지만, 이는 필수가 아니므로 부담 없이 넘어가주셔도 됩니다!")
+    
+    # # 평가 기준 설명
+    # left_col_eval, right_col_eval = st.columns([3, 4])
 
-    # 오른쪽 열: 문제 평가 기준
-    with right_col_eval:
-        st.write("[문제 평가 기준] ")
-        st.write("・  ")
-        st.write("・  ")
+    # # 왼쪽 열: 지문 평가 기준
+    # with left_col_eval:
+    #     st.write("[지문 평가 기준] ")
+    #     st.write("・  ")
+    #     st.write("・  ")
+
+    # # 오른쪽 열: 문제 평가 기준
+    # with right_col_eval:
+    #     st.write("[문제 평가 기준] ")
+    #     st.write("・  ")
+    #     st.write("・  ")
 
     st.markdown("  ")
 
@@ -384,7 +389,7 @@ def second_page():
                                 sub_passage_value = sub_sub["sub_sub_questions_passage"][sub_idx]
                                 if sub_passage_value is not None and not (isinstance(sub_passage_value, float) and math.isnan(sub_passage_value)):
                                     # sub_question = f"({sub_passage_value})"
-                                    sub_question = sub_problem_value.split("\n")  # 줄 바꿈 기준으로 나누기
+                                    sub_question = sub_passage_value.split("\n")  # 줄 바꿈 기준으로 나누기
                                 else:
                                     sub_question = " "  # 빈 문자열로 대체
 
