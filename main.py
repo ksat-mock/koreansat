@@ -330,9 +330,9 @@ def first_page():
     phone_number = st.text_input("전화번호 뒷자리 4자리를 입력해주세요:", max_chars=4)
 
     st.markdown("##### 나이")
-    age = st.slider("(만)나이를 선택해주세요", min_value=10, max_value=70, value=25)
-    age = st.number_input("(만)나이를 입력하세요", min_value=0, max_value=120, value=25)
-    age = st.selectbox("나이를 선택하세요:", range(10, 71))
+    age = st.selectbox("(만)나이를 선택하세요:", range(10, 71), index=14)
+    
+    st.write(f"선택된 나이는 {age}세 입니다.")
 
     st.title("  ")
 
