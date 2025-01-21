@@ -205,9 +205,9 @@ def second_page():
     # tab_count = 5  # 예시로 7개의 탭이 있다고 가정
     # for tab_idx in range(1, tab_count + 1):
 
-    tabs_5 = tabs[:5]
+    tabs = tabs[:5]
     
-    for tab_idx in tabs_5:
+    for tab_idx in tabs:
         tab_key = f"answers_tab{tab_idx}"
         if tab_key not in st.session_state:
             # 각 탭에 대해 문제의 개수에 맞는 사용자 답안을 저장할 리스트 초기화
@@ -299,8 +299,7 @@ def second_page():
 
     
     with st.container():
-        # 컬럼 비율: 지문(1.5) + 문제(1) + 하위 문제들(1씩)
-        # cols = st.columns([1.5, 1, 1, 1, 1, 1])
+        # 컬럼 비율: 지문(3) + 문제(2) + 하위 문제들(1씩)
         cols = st.columns([3, 2, 1, 1, 1, 1])
     
         # 1️⃣ 지문 (첫 번째 컬럼)
