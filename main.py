@@ -202,10 +202,12 @@ def second_page():
         st.session_state.completed_tabs = set()
 
     # 사용자 답안을 저장할 리스트 (Session State 사용) - 탭 개수만큼 답안 세션 관리
-    tab_count = 5  # 예시로 7개의 탭이 있다고 가정
+    # tab_count = 5  # 예시로 7개의 탭이 있다고 가정
+    # for tab_idx in range(1, tab_count + 1):
 
-    for tab_idx in range(1, tab_count + 1):
-    # for tab_idx in tabs:
+    tabs_5 = tabs[:5]
+    
+    for tab_idx in tabs_5:
         tab_key = f"answers_tab{tab_idx}"
         if tab_key not in st.session_state:
             # 각 탭에 대해 문제의 개수에 맞는 사용자 답안을 저장할 리스트 초기화
