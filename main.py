@@ -7,8 +7,8 @@ from streamlit_gsheets import GSheetsConnection
 import math
 import pandas as pd
 import firebase_admin
-from firebase_admin import firestore
-from firebase_admin import credentials, db
+from firebase_admin import firestore, credentials, db
+
 
 @st.cache_data(ttl=60)  # 60초마다 캐시 갱신
 def get_data():
@@ -66,8 +66,6 @@ def get_data():
             tabs_data[tab_name]["correct_answers"].append(int(correct_answer))
     
     return tabs_data, sub_sub
-
-
 
 
 def initialize_firestore():
@@ -142,186 +140,6 @@ def save_data_to_firestore():
 
 
 
-
-
-# def initialize_firebase():
-#     """Firebase 초기화 함수."""
-#     if not firebase_admin._apps:  # 이미 초기화된 경우 방지
-#         cred = credentials.Certificate({
-#             "type": st.secrets["firebase"]["type"],
-#             "project_id": st.secrets["firebase"]["project_id"],
-#             "private_key_id": st.secrets["firebase"]["private_key_id"],
-#             "private_key": st.secrets["firebase"]["private_key"].replace("\\n", "\n"),
-#             "client_email": st.secrets["firebase"]["client_email"],
-#             "client_id": st.secrets["firebase"]["client_id"],
-#             "auth_uri": st.secrets["firebase"]["auth_uri"],
-#             "token_uri": st.secrets["firebase"]["token_uri"],
-#             "auth_provider_x509_cert_url": st.secrets["firebase"]["auth_provider_x509_cert_url"],
-#             "client_x509_cert_url": st.secrets["firebase"]["client_x509_cert_url"]
-#         })
-#         firebase_admin.initialize_app(cred, {
-#             "databaseURL": "https://korean-sat-6cdb5-default-rtdb.asia-southeast1.firebasedatabase.app/"
-#             # "databaseURL": "https://korean-sat-6cdb5.firebaseio.com"
-#         })
-
-
-# def save_data_to_firebase():
-#     """Firebase에 데이터를 저장하는 함수."""
-#     initialize_firebase()
-
-#     # 현재 탭 정보 가져오기
-#     tab_idx = st.session_state.current_tab
-#     tab_key = f"answers_tab{tab_idx}"
-#     passage_key = f"subquestions_passage_tab{tab_idx}"
-#     problems_key = f"subquestions_problems_tab{tab_idx}"
-
-#     # 세션 상태에서 사용자 데이터 가져오기
-#     user_answers = st.session_state.get(tab_key, [])
-#     passage_eval = st.session_state.get(passage_key, {})
-#     problems_eval = st.session_state.get(problems_key, {})
-
-#     # 저장할 데이터 생성
-#     data_to_save = {
-#         "탭": tab_idx,
-#         "사용자 답안": user_answers,
-#         "지문 평가": {f"passage_q{i+1}": passage_eval.get(f"passage_q{i+1}", "") for i in range(len(user_answers))},
-#         "문제 평가": {f"problems_q{i+1}": problems_eval.get(f"problems_q{i+1}", "") for i in range(len(user_answers))},
-#     }
-
-#     # Firebase 경로 설정 및 데이터 업로드
-#     ref = db.reference(f"tabs_data/tab_{tab_idx}")
-#     ref.set(data_to_save)  # Firebase의 set() 메서드로 데이터 저장
-
-#     st.success(f"Tab {tab_idx} 데이터가 Firebase에 저장되었습니다!")
-
-
-
-
-
-
-
-
-# # 구글 시트에 세션 데이터 저장 함수
-# def save_data_to_gsheet():
-#     # GSheets 연결 객체 생성
-#     conn = st.connection("gsheets", type=GSheetsConnection)
-
-#     # 저장할 데이터 준비
-#     tab_idx = st.session_state.current_tab  # 현재 탭
-#     tab_key = f"answers_tab{tab_idx}"  # 사용자 답안 키
-#     passage_key = f"subquestions_passage_tab{tab_idx}"  # 지문 평가 키
-#     problems_key = f"subquestions_problems_tab{tab_idx}"  # 문제 평가 키
-
-#     # 사용자 답안과 평가 데이터 추출
-#     user_answers = st.session_state.get(tab_key, [])
-#     passage_eval = st.session_state.get(passage_key, {})
-#     problems_eval = st.session_state.get(problems_key, {})
-
-#     # 저장할 데이터프레임 생성
-#     data_to_save = {
-#         "탭": [tab_idx] * len(user_answers),
-#         "질문 번호": [i + 1 for i in range(len(user_answers))],
-#         "사용자 답안": user_answers,
-#         "지문 평가": [passage_eval.get(f"passage_q{i+1}", []) for i in range(len(user_answers))],
-#         "문제 평가": [problems_eval.get(f"problems_q{i+1}", []) for i in range(len(user_answers))],
-#     }
-#     df_to_save = pd.DataFrame(data_to_save)
-
-#     # A33 이후부터 데이터 추가
-#     existing_data = conn.read()
-#     next_row = len(existing_data) + 1  # 기존 데이터 길이를 기준으로 다음 행 계산
-#     conn.update(df_to_save, range=f"A{next_row}")
-
-
-# def save_data_to_gsheet():
-#     # GSheets 연결 객체 생성
-#     conn = st.connection("gsheets", type=GSheetsConnection)
-
-#     # 저장할 데이터 준비
-#     tab_idx = st.session_state.current_tab
-#     tab_key = f"answers_tab{tab_idx}"
-#     passage_key = f"subquestions_passage_tab{tab_idx}"
-#     problems_key = f"subquestions_problems_tab{tab_idx}"
-
-#     user_answers = st.session_state.get(tab_key, [])
-#     passage_eval = st.session_state.get(passage_key, {})
-#     problems_eval = st.session_state.get(problems_key, {})
-
-#     # 저장할 데이터 리스트 생성
-#     data_to_save = []
-#     for i, answer in enumerate(user_answers):
-#         row = [
-#             tab_idx,
-#             i + 1,
-#             answer,
-#             passage_eval.get(f"passage_q{i+1}", ""),
-#             problems_eval.get(f"problems_q{i+1}", "")
-#         ]
-#         data_to_save.append(row)
-
-#     # 기존 데이터 읽기
-#     existing_data = conn.read()
-#     next_row = len(existing_data) + 1  # 기존 데이터 길이를 기준으로 다음 행 계산
-
-#     # 데이터 업데이트
-#     if data_to_save:
-#         update_range = f"A{next_row}:E{next_row + len(data_to_save) - 1}"
-#         conn.update(worksheet="시트1", data=data_to_save, range=update_range)
-
-#     st.success("데이터가 성공적으로 저장되었습니다.")
-
-
-
-
-
-# # 구글 시트 인증 설정
-# def authenticate_google_sheets():
-#     credentials_info = st.secrets["connections.gsheets"]  # .streamlit/secrets.toml에서 인증 정보 읽어오기
-#     credentials = Credentials.from_service_account_info(
-#         credentials_info,
-#         scopes=["https://www.googleapis.com/auth/spreadsheets"]
-#     )
-#     client = gspread.authorize(credentials)
-#     return client
-
-
-# # 구글 시트에 데이터 추가 함수
-# def save_data_to_gsheet():
-#     # 구글 시트 인증
-#     client = authenticate_google_sheets()
-    
-#     # 구글 시트 열기 (시트 이름과 워크시트 이름)
-#     sheet = client.open_by_url(st.secrets["connections.gsheets"]["spreadsheet"]).sheet1  # URL을 통해 시트 열기
-    
-#     # 저장할 데이터 준비
-#     tab_idx = st.session_state.current_tab  # 현재 탭
-#     tab_key = f"answers_tab{tab_idx}"  # 사용자 답안 키
-#     passage_key = f"subquestions_passage_tab{tab_idx}"  # 지문 평가 키
-#     problems_key = f"subquestions_problems_tab{tab_idx}"  # 문제 평가 키
-
-#     # 사용자 답안과 평가 데이터 추출
-#     user_answers = st.session_state.get(tab_key, [])
-#     passage_eval = st.session_state.get(passage_key, {})
-#     problems_eval = st.session_state.get(problems_key, {})
-
-#     # 저장할 데이터프레임 생성
-#     data_to_save = {
-#         "탭": [tab_idx] * len(user_answers),
-#         "질문 번호": [i + 1 for i in range(len(user_answers))],
-#         "사용자 답안": user_answers,
-#         "지문 평가": [passage_eval.get(f"passage_q{i+1}", []) for i in range(len(user_answers))],
-#         "문제 평가": [problems_eval.get(f"problems_q{i+1}", []) for i in range(len(user_answers))],
-#     }
-#     df_to_save = pd.DataFrame(data_to_save)
-    
-#     # DataFrame을 2D list로 변환하여 시트에 추가
-#     data_to_save_list = df_to_save.values.tolist()
-    
-#     # 구글 시트에 데이터를 추가 (A2부터 시작)
-#     for row in data_to_save_list:
-#         sheet.append_row(row)
-        
-
 ##########################################################
 ##########################################################
 
@@ -384,10 +202,10 @@ def second_page():
         st.session_state.completed_tabs = set()
 
     # 사용자 답안을 저장할 리스트 (Session State 사용) - 탭 개수만큼 답안 세션 관리
-    # tab_count = 7  # 예시로 7개의 탭이 있다고 가정
+    tab_count = 5  # 예시로 7개의 탭이 있다고 가정
 
-    # for tab_idx in range(1, tab_count + 1):
-    for tab_idx in tabs:
+    for tab_idx in range(1, tab_count + 1):
+    # for tab_idx in tabs:
         tab_key = f"answers_tab{tab_idx}"
         if tab_key not in st.session_state:
             # 각 탭에 대해 문제의 개수에 맞는 사용자 답안을 저장할 리스트 초기화
@@ -698,47 +516,7 @@ def second_page():
                         st.info(f"문제 {idx + 1}: 맞았습니다.")
 
 
-        with cols[1]:
-            # '평가 제출하기' 버튼 추가
-            # if st.button("평가 제출하기"):
-            #     all_selected = True  # 기본적으로 모두 선택된 것으로 가정
-            
-            #     # 현재 탭에 대한 지문 관련 문제와 문제 관련 문제 체크
-            #     tab_idx = st.session_state.current_tab  # 현재 탭 가져오기
-            #     passage_key = f"subquestions_passage_tab{tab_idx}"
-            #     problems_key = f"subquestions_problems_tab{tab_idx}"
-            
-            #     # 1️⃣ 지문 관련 문제 체크 (한 탭에 4개)
-            #     for problems_q_key, sub_answers in st.session_state.get(passage_key, {}).items():
-            #         for sub_idx, value in enumerate(sub_answers):
-            #             # 4개 항목 확인
-            #             if value is None:
-            #                 all_selected = False
-            #                 st.error(f"선택되지 않은 항목: {problems_q_key} - 지문 관련 문제 {sub_idx + 1}")  # 선택되지 않은 항목
-            #                 break
-            
-            #     # 2️⃣ 문제 관련 문제 체크 (각 문제마다 4개)
-            #     if all_selected:  # 지문 관련 문제가 다 선택되었다면, 문제 관련 문제 체크
-            #         for idx, q in enumerate(tabs_data[tab_idx]["questions"]):
-            #             problem_sub_answers = st.session_state.get(f"subquestions_problems_tab{tab_idx}", {}).get(f"problems_q{idx+1}", [])
-            #             for sub_idx, value in enumerate(problem_sub_answers):
-            #                 # 각 문제마다 4개 항목 확인
-            #                 if value is None:
-            #                     all_selected = False
-            #                     st.error(f"선택되지 않은 항목: 문제 {idx+1} - 문제 관련 문제 {sub_idx + 1}")  # 선택되지 않은 항목
-            #                     break
-
-            #     st.write(st.session_state.get(passage_key, {}))
-            #     st.write(st.session_state.get(f"subquestions_problems_tab{tab_idx}", {}))
-                
-            #     # 평가 완료 여부에 대한 메시지 출력
-            #     if all_selected:
-            #         st.session_state[f"evaluation_submitted_tab{tab_idx}"] = True
-            #         st.success("지문 및 문제 평가를 완료하였습니다!")
-            #     else:
-            #         st.error("모든 문제에 대해 평가를 선택해주세요.")
-
-                
+        with cols[1]:                
             # '평가 제출하기' 버튼 추가
             if st.button("평가 제출하기"):
                 all_selected = True  # 기본적으로 모두 선택된 것으로 가정
