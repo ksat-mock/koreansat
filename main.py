@@ -301,9 +301,16 @@ def second_page():
             style = ""  # 기본 스타일
 
         if isinstance(tab, str):
-            if cols[i].button(tab, key=f"tab_button_{i}"):
-                st.session_state.current_tab = tab
+            button_clicked = cols[i].button(tab, key=f"tab_button_{i}", help=f"Click to select {tab}", use_container_width=True)
+            if button_clicked:
+                st.session_state.current_tab = tab  # 선택된 탭을 저장
+            
+            # if cols[i].button(tab, key=f"tab_button_{i}"):
+            #     st.session_state.current_tab = tab
 
+        # 선택된 탭에 스타일을 적용
+        cols[i].markdown(f'<div style="{style}">{tab}</div>', unsafe_allow_html=True)
+        
     current_data = tabs_data[st.session_state.current_tab]
     passage = current_data["passage"]
     questions = current_data["questions"]
