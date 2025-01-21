@@ -310,7 +310,7 @@ def second_page():
         if tab == st.session_state.current_tab:
             style = "border: 2px solid #1E90FF; background-color: lightgreen; font-weight: bold;"  # 선택된 탭
         elif tab in st.session_state["completed_tabs"]:  # 푼 탭을 체크
-            style = "border: 2px solid #ADD8E6; background-color: lightblue;"  # 푼 탭
+            style = "border: 2px solid #a2c6e8; background-color: lightblue;"  # 푼 탭
         else:
             style = ""  # 기본 스타일
 
