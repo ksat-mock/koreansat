@@ -332,12 +332,12 @@ def first_page():
     st.subheader("  ")
 
     st.markdown("##### 나이")
-    age = st.selectbox("(만)나이를 선택하세요:", range(10, 71), index=14)
+    age = st.selectbox("만 나이를 선택해주세요:", range(10, 71), index=None, placeholder="만 나이를 선택해 주세요...")
     
     st.subheader("  ")
 
     if st.button("다음"):
-        if phone_number and phone_number.isdigit() and len(str(phone_number)) == 4:
+        if phone_number and phone_number.isdigit() and len(str(phone_number)) == 4 and age.isinstance():
             st.session_state.phone_number = phone_number
             st.session_state.age = age
             st.session_state.page = "second"  # 두 번째 페이지로 이동
