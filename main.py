@@ -10,7 +10,7 @@ import firebase_admin
 from firebase_admin import firestore
 from firebase_admin import credentials, db
 
-
+@st.cache_data(ttl=60)  # 60초마다 캐시 갱신
 def get_data():
     # Create a connection object.
     conn = st.connection("gsheets", type=GSheetsConnection)
