@@ -304,13 +304,14 @@ def second_page():
             button_clicked = cols[i].button(tab, key=f"tab_button_{i}", use_container_width=True)
             if button_clicked:
                 st.session_state.current_tab = tab  # 선택된 탭을 저장
+                st.rerun()  # 페이지 강제 새로고침
             
             # if cols[i].button(tab, key=f"tab_button_{i}"):
             #     st.session_state.current_tab = tab
 
             # 선택된 탭에 스타일을 적용
             cols[i].markdown(f'<div style="{style}"></div>', unsafe_allow_html=True)
-            st.rerun()  # 페이지 강제 새로고침
+
         
     current_data = tabs_data[st.session_state.current_tab]
     passage = current_data["passage"]
