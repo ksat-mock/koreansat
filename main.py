@@ -785,7 +785,7 @@ def second_page():
                     # save_data_to_firebase()
 
                     save_data_to_firestore()  # Firestore에 데이터 저장
-                    st.success("평가 데이터가 성공적으로 제출되었습니다!")
+                    # st.success("평가 데이터가 성공적으로 제출되었습니다!")
                     
                 else:
                     st.error("모든 문제에 대해 평가를 선택해주세요.")
@@ -812,34 +812,40 @@ def second_page():
         else:
             st.warning("피드백을 입력해주세요.")
 
-    # 각 탭에 대한 피드백 세션 상태 초기화
-    if f'feedback_submitted_tab{st.session_state.current_tab}' not in st.session_state:
-        st.session_state[f'feedback_submitted_tab{st.session_state.current_tab}'] = False
-
-    if f'feedback_tab{st.session_state.current_tab}' not in st.session_state:
-        st.session_state[f'feedback_tab{st.session_state.current_tab}'] = ""
+    with st.container():
+        cols = st.columns([1])
     
-    # 가로 선 추가
-    st.divider()
+        # 그냥 컬럼 하나 뿐
+        with cols[0]:
 
-    # 피드백 입력 필드 (제출 후에도 유지)
-    st.write("   ")
-    st.write("   ")
-    st.write("   ")
-    st.subheader(f"[{st.session_state.current_tab}] 지문 및 문제에 대한 전반적인 피드백을 남겨주세요.")  # 현재 탭에 맞는 제목
-
-    # 각 탭별로 고유한 key를 설정하여 피드백 입력 창 만들기
-    feedback_input_key = f"feedback_input_{st.session_state.current_tab}"
-    st.text_area("의견을 남겨주세요:", key=feedback_input_key)
-
-    # 피드백 제출 버튼 (콜백 함수 연결)
-    st.button("피드백 제출하기", on_click=submit_feedback)
-
-    # 피드백 제출 완료 메시지 및 입력한 내용 표시
-    if st.session_state[f'feedback_submitted_tab{st.session_state.current_tab}']:
-        # st.success("피드백이 제출되었습니다!")
-        st.write("남겨주신 피드백:")
-        st.info(st.session_state[f'feedback_tab{st.session_state.current_tab}'])  # 저장된 피드백 출력
+            # 각 탭에 대한 피드백 세션 상태 초기화
+            if f'feedback_submitted_tab{st.session_state.current_tab}' not in st.session_state:
+                st.session_state[f'feedback_submitted_tab{st.session_state.current_tab}'] = False
+        
+            if f'feedback_tab{st.session_state.current_tab}' not in st.session_state:
+                st.session_state[f'feedback_tab{st.session_state.current_tab}'] = ""
+            
+            # 가로 선 추가
+            st.divider()
+        
+            # 피드백 입력 필드 (제출 후에도 유지)
+            st.write("   ")
+            st.write("   ")
+            st.write("   ")
+            st.subheader(f"[{st.session_state.current_tab}] 지문 및 문제에 대한 전반적인 피드백을 남겨주세요.")  # 현재 탭에 맞는 제목
+        
+            # 각 탭별로 고유한 key를 설정하여 피드백 입력 창 만들기
+            feedback_input_key = f"feedback_input_{st.session_state.current_tab}"
+            st.text_area("의견을 남겨주세요:", key=feedback_input_key)
+        
+            # 피드백 제출 버튼 (콜백 함수 연결)
+            st.button("피드백 제출하기", on_click=submit_feedback)
+        
+            # 피드백 제출 완료 메시지 및 입력한 내용 표시
+            if st.session_state[f'feedback_submitted_tab{st.session_state.current_tab}']:
+                # st.success("피드백이 제출되었습니다!")
+                st.write("남겨주신 피드백:")
+                st.info(st.session_state[f'feedback_tab{st.session_state.current_tab}'])  # 저장된 피드백 출력
 
 
 
