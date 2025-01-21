@@ -124,6 +124,7 @@ def save_data_to_firestore():
     collection_name = f"tab_{tab_idx}"  # 각 탭마다 별도의 콜렉션
     doc_id = f"user_{phone_number}"
     doc_ref = db.collection(collection_name).document(doc_id)  # phone_number를 기준으로 문서 생성
+    doc_ref.set(data_to_save)  # Firestore의 set() 메서드로 데이터 저장
 
     # 기존에 데이터가 있으면 배열에 누적 (배열 방식)
     # doc_ref.set(data_to_save, merge=True)  # `merge=True`로 덮어쓰지 않고 기존 문서에 추가
@@ -322,9 +323,14 @@ def first_page():
     st.markdown("# 전교 일등의 비밀")
     st.markdown("#### LLM-as-a-Judge를 이용한 수능 문제 출제 및 평가")
     st.title("  ")
+    
     st.markdown("##### 전화번호 뒷자리 입력")
+    phone_number = st.text_input("전화번호 뒷자리 4자리를 입력해주세요:", max_chars=4)
 
-    phone_number = st.text_input("전화번호 뒷자리 4자리를 입력하세요:", max_chars=4)
+    st.title("  ")
+
+    st.markdown("##### 나이")
+    age = st.slider("나이를 선택해주세요", min_value=10, max_value=80)
 
     if st.button("다음"):
         if phone_number and phone_number.isdigit() and len(str(phone_number)) == 4:
