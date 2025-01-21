@@ -170,6 +170,20 @@ def first_page():
             st.error("전화번호 뒷자리 4자리를 정확하게 입력하세요.")
 
 
+def reset_radio_values_for_tab(tab_idx):
+    # 지문 관련 문제 초기화
+    passage_key = f"subquestions_passage_tab{tab_idx}"
+    if passage_key in st.session_state:
+        for problems_q_key in st.session_state[passage_key]:
+            st.session_state[passage_key][problems_q_key] = [None] * len(st.session_state[passage_key][problems_q_key])
+
+    # 문제 관련 문제 초기화
+    problems_key = f"subquestions_problems_tab{tab_idx}"
+    if problems_key in st.session_state:
+        for problems_q_key in st.session_state[problems_key]:
+            st.session_state[problems_key][problems_q_key] = [None] * len(st.session_state[problems_key][problems_q_key])
+
+
 # 두 번째 페이지: 문제 풀이 페이지
 def second_page():
     st.set_page_config(layout="wide")
@@ -287,11 +301,6 @@ def second_page():
     # 버튼 표시
     cols = st.columns(len(tabs))
     for i, tab in enumerate(tabs):
-        # style = (
-        #     "border: 2px solid pink; background-color: lightgreen;"
-        #     if tab == st.session_state.current_tab
-        #     else ""
-        # )
 
         submitted_key = f"submitted_tab{tab}"
         
@@ -299,7 +308,7 @@ def second_page():
         if tab == st.session_state.current_tab:
             style = "border: 2px solid #1E90FF; background-color: lightgreen; font-weight: bold;"  # 선택된 탭
         elif tab in st.session_state["completed_tabs"]:  # 푼 탭을 체크
-            style = "border: 2px solid #1E90FF; background-color: lightblue;"  # 푼 탭
+            style = "border: 2px solid #ADD8E6; background-color: lightblue;"  # 푼 탭
         else:
             style = ""  # 기본 스타일
 
@@ -565,6 +574,9 @@ def second_page():
             # '평가 제출하기' 버튼 추가
             if st.button("평가 제출하기"):
                 all_selected = True  # 기본적으로 모두 선택된 것으로 가정
+
+                # 현재 탭에 대한 지문 및 문제 평가 완료 여부 확인용
+                tabs = list(tabs_data.keys())  # 탭 리스트 가져오기
             
                 # 현재 탭에 대한 지문 관련 문제와 문제 관련 문제 체크
                 tab_idx = st.session_state.current_tab  # 현재 탭 가져오기
@@ -613,6 +625,12 @@ def second_page():
 
                     save_data_to_firestore()  # Firestore에 데이터 저장
                     # st.success("평가 데이터가 성공적으로 제출되었습니다!")
+
+                    # 다음 탭 초기화
+                    current_tab_index = tabs.index(tab_idx)  # 현재 탭 인덱스 찾기
+                    if current_tab_index + 1 < len(tabs):  # 다음 탭이 있는 경우
+                        next_tab_key = tabs[current_tab_index + 1]
+                        reset_radio_values_for_tab(next_tab_key)
 
                     
                 else:
