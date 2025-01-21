@@ -280,37 +280,88 @@ def second_page():
     st.markdown("  ")
 
     
+    # # 버튼 표시
+    # cols = st.columns(len(tabs))
+    # for i, tab in enumerate(tabs):
+    #     # style = (
+    #     #     "border: 2px solid pink; background-color: lightgreen;"
+    #     #     if tab == st.session_state.current_tab
+    #     #     else ""
+    #     # )
+
+    #     submitted_key = f"submitted_tab{tab}"
+        
+    #     # 선택된 탭과 푼 탭을 구분하기 위한 스타일 설정
+    #     if tab == st.session_state.current_tab:
+    #         style = "border: 2px solid blue; background-color: lightgreen; font-weight: bold;"  # 선택된 탭
+    #     # elif tab in st.session_state.completed_tabs:  # 푼 탭을 체크
+    #     elif st.session_state[submitted_key]:  # 푼 탭을 체크
+    #         style = "border: 2px solid blue; background-color: lightblue;"  # 푼 탭
+    #     else:
+    #         style = ""  # 기본 스타일
+
+    #     if isinstance(tab, str):
+    #         button_clicked = cols[i].button(tab, key=f"tab_button_{i}", use_container_width=True)
+    #         if button_clicked:
+    #             st.session_state.current_tab = tab  # 선택된 탭을 저장
+    #             st.rerun()  # 페이지 강제 새로고침
+            
+    #         # if cols[i].button(tab, key=f"tab_button_{i}"):
+    #         #     st.session_state.current_tab = tab
+
+    #         # 선택된 탭에 스타일을 적용
+    #         cols[i].markdown(f'<div style="{style}"></div>', unsafe_allow_html=True)
+
+
+
+    # 사용자 정의 CSS 삽입
+    st.markdown("""
+        <style>
+        .custom-tab {
+            border: 2px solid gray;
+            background-color: white;
+            font-weight: normal;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .custom-tab:hover {
+            background-color: #f0f0f0;
+        }
+        .custom-tab.selected {
+            border: 2px solid blue;
+            background-color: lightgreen;
+            font-weight: bold;
+        }
+        .custom-tab.completed {
+            border: 2px solid blue;
+            background-color: lightblue;
+            font-weight: bold;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+    
     # 버튼 표시
     cols = st.columns(len(tabs))
     for i, tab in enumerate(tabs):
-        # style = (
-        #     "border: 2px solid pink; background-color: lightgreen;"
-        #     if tab == st.session_state.current_tab
-        #     else ""
-        # )
-
         submitted_key = f"submitted_tab{tab}"
-        
-        # 선택된 탭과 푼 탭을 구분하기 위한 스타일 설정
+    
+        # 선택된 탭과 푼 탭을 구분하기 위한 클래스 설정
         if tab == st.session_state.current_tab:
-            style = "border: 2px solid pink; background-color: lightgreen; font-weight: bold;"  # 선택된 탭
-        # elif tab in st.session_state.completed_tabs:  # 푼 탭을 체크
-        elif st.session_state[submitted_key]:  # 푼 탭을 체크
-            style = "border: 2px solid blue; background-color: lightblue;"  # 푼 탭
+            tab_class = "custom-tab selected"  # 선택된 탭
+        elif st.session_state.get(submitted_key, False):  # 푼 탭 확인
+            tab_class = "custom-tab completed"  # 푼 탭
         else:
-            style = ""  # 기본 스타일
-
-        if isinstance(tab, str):
-            button_clicked = cols[i].button(tab, key=f"tab_button_{i}", use_container_width=True)
-            if button_clicked:
+            tab_class = "custom-tab"  # 기본 탭
+    
+        # 버튼 생성
+        with cols[i]:
+            # HTML 버튼 생성
+            if st.markdown(f'<div class="{tab_class}" id="tab_{i}" onclick="onClickTab({i})">{tab}</div>', unsafe_allow_html=True):
                 st.session_state.current_tab = tab  # 선택된 탭을 저장
                 st.rerun()  # 페이지 강제 새로고침
-            
-            # if cols[i].button(tab, key=f"tab_button_{i}"):
-            #     st.session_state.current_tab = tab
 
-            # 선택된 탭에 스타일을 적용
-            cols[i].markdown(f'<div style="{style}"></div>', unsafe_allow_html=True)
 
         
     current_data = tabs_data[st.session_state.current_tab]
