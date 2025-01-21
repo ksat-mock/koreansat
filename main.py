@@ -440,13 +440,13 @@ def second_page():
                             # NaN 또는 None 확인 및 처리
                             sub_problem_value = sub_sub["sub_sub_questions_problems"][sub_idx]
                             if sub_problem_value is not None and not (isinstance(sub_problem_value, float) and math.isnan(sub_problem_value)):
-                                sub_problem_value = sub_problem_value.replace("\n", "<br>")
-                                sub_question = f"({sub_problem_value})"
+                                sub_question = sub_problem_value.split("\n")  # 줄 바꿈 기준으로 나누기
+                                # sub_question = f"({sub_problem_value})"
                             else:
                                 sub_question = " "  # 빈 문자열로 대체
             
                             st.session_state[problems_key][problems_q_key][sub_idx] = st.radio(
-                                sub_question,
+                                "\n".join(sub_question),
                                 options=[5, 4, 3, 2, 1],  # 1부터 5까지 선택 가능
                                 index=None,  # 기본값 없음
                                 key=sub_key
