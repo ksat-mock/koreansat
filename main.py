@@ -310,7 +310,7 @@ def second_page():
 
             # 선택된 탭에 스타일을 적용
             cols[i].markdown(f'<div style="{style}"></div>', unsafe_allow_html=True)
-            # st.rerun()  # 페이지 강제 새로고침
+            st.rerun()  # 페이지 강제 새로고침
         
     current_data = tabs_data[st.session_state.current_tab]
     passage = current_data["passage"]
