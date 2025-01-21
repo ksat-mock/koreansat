@@ -301,7 +301,7 @@ def second_page():
             style = ""  # 기본 스타일
 
         if isinstance(tab, str):
-            button_clicked = cols[i].button(tab, key=f"tab_button_{i}", help=f"Click to select {tab}", use_container_width=True)
+            button_clicked = cols[i].button(tab, key=f"tab_button_{i}", use_container_width=True)
             if button_clicked:
                 st.session_state.current_tab = tab  # 선택된 탭을 저장
             
@@ -309,7 +309,7 @@ def second_page():
             #     st.session_state.current_tab = tab
 
         # 선택된 탭에 스타일을 적용
-        cols[i].markdown(f'<div style="{style}">{tab}</div>', unsafe_allow_html=True)
+        cols[i].markdown(f'<div style="{style}">{}</div>', unsafe_allow_html=True)
         
     current_data = tabs_data[st.session_state.current_tab]
     passage = current_data["passage"]
@@ -603,6 +603,9 @@ def second_page():
 
                     save_data_to_firestore()  # Firestore에 데이터 저장
                     # st.success("평가 데이터가 성공적으로 제출되었습니다!")
+
+                    # 세션 상태 변경 후 강제 렌더링을 유도하는 방법
+                    st.session_state.page = "second"  # 예시: 페이지를 변경해서 리렌더링 유도
                     
                 else:
                     st.error("모든 문제에 대해 평가를 선택해주세요.")
