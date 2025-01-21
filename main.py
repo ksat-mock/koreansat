@@ -309,7 +309,7 @@ def second_page():
             #     st.session_state.current_tab = tab
 
         # 선택된 탭에 스타일을 적용
-        cols[i].markdown(f'<div style="{style}">{}</div>', unsafe_allow_html=True)
+        cols[i].markdown(f'<div style="{style}"></div>', unsafe_allow_html=True)
         
     current_data = tabs_data[st.session_state.current_tab]
     passage = current_data["passage"]
