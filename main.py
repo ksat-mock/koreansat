@@ -170,9 +170,10 @@ def first_page():
             st.error("전화번호 뒷자리 4자리를 정확하게 입력하세요.")
 
 
-def reset_radio_values_for_all_tabs():
+def reset_radio_values_for_all_tabs(tabs):
     # 모든 탭의 세션 상태 초기화
-    for tab_key in tabs_data.keys():
+    # for tab_key in tabs_data.keys():
+    for tab_key in tabs_data.keys(tabs):
         # 지문 관련 문제 초기화
         passage_key = f"subquestions_passage_tab{tab_key}"
         if passage_key in st.session_state:
@@ -637,7 +638,7 @@ def second_page():
                     # st.success("평가 데이터가 성공적으로 제출되었습니다!")
 
                     # 모든 탭 상태 초기화
-                    reset_radio_values_for_all_tabs()
+                    reset_radio_values_for_all_tabs(tabs)
 
                     st.rerun()
 
