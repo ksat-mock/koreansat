@@ -641,8 +641,8 @@ def second_page():
                     # 모든 탭 상태 초기화
                     # reset_radio_values_for_all_tabs(tabs)
 
-                    # 0.4초 대기
-                    time.sleep(0.4)
+                    # 1초 대기
+                    time.sleep(1)
 
                     st.rerun()
 
